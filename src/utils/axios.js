@@ -31,11 +31,7 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       try {
         originalRequest._retry = true
         const { data } = await instance.post(

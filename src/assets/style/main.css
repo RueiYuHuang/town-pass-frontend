@@ -5,6 +5,7 @@
 @layer base {
   html {
     font-family: 'PingFang TC', 'PingFang SC', 'Microsoft JhengHei', sans-serif;
+    color: #30383D;
   }
 }
 
@@ -17,4 +18,5 @@
 :root {
   --primary-500: #5ab4c5;
   --bg-grey-50: #edf8fa;
+  --bg-grey-800: #30383D;
 }
