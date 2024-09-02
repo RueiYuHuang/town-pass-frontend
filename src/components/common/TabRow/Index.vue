@@ -1,7 +1,11 @@
 <script setup>
 import { watch, ref, provide } from 'vue'
 const props = defineProps({
-  modelValue: { type: [Object, String, Number], default: null, required: true },
+  modelValue: {
+    type: [Object, String, Number],
+    default: null,
+    required: true,
+  },
 })
 const emit = defineEmits(['update:modelValue', 'submit'])
 

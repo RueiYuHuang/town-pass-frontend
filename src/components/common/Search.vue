@@ -2,8 +2,16 @@
 import iconMagnifier from '@/assets/icon/magnifier.svg'
 import iconXmark from '@/assets/icon/xmark.svg'
 const props = defineProps({
-  modelValue: { type: String, default: '', required: true },
-  placeholder: { type: String, default: '', required: false },
+  modelValue: {
+    type: String,
+    default: '',
+    required: true,
+  },
+  placeholder: {
+    type: String,
+    default: '',
+    required: false,
+  },
 })
 const emit = defineEmits(['update:modelValue', 'submit'])
 

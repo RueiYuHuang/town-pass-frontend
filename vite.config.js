@@ -10,9 +10,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  define: {
-    'process.env': {
-      BASE_URL: process.env.VITE_BASE_URL,
-    },
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
   },
 })
