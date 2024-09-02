@@ -5,18 +5,18 @@
 @layer base {
   html {
     font-family: 'PingFang TC', 'PingFang SC', 'Microsoft JhengHei', sans-serif;
-    color: #30383D;
+    color: #30383d;
   }
 }
 
-@layer components {
+/* @layer components {
   .btn {
     @apply bg-violet-500 hover:bg-violet-700 focus:ring-violet-400 rounded-full px-5 py-2 font-semibold text-white shadow-md focus:outline-none focus:ring focus:ring-opacity-75;
   }
-}
+} */
 
 :root {
   --primary-500: #5ab4c5;
   --bg-grey-50: #edf8fa;
-  --bg-grey-800: #30383D;
+  --bg-grey-800: #30383d;
 }
