@@ -30,8 +30,9 @@ const initMap = async () => {
 onMounted(async () => {
   initMap()
 })
+
+/** 添加一個地點 */
 const markers = ref([])
-// 添加一個地點
 const addMarker = async (position, title = 'Uluru') => {
   // 清除地圖上的所有標記
   markers.value.forEach(marker => marker.map = null)
@@ -52,7 +53,30 @@ const addMarker = async (position, title = 'Uluru') => {
   map.panTo(position)
 }
 
-// 搜尋地點
+/** 設定區域 */ 
+const polygons = ref([])
+const addPolygon = (triangleCoords) => {
+  // 清除地圖上其他區域
+  polygons.value.forEach(polygon => polygon.setMap(null))
+  polygons.value = []
+  // Construct the polygon.
+  const bermudaTriangle = new google.maps.Polygon({
+    paths: triangleCoords,
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#FF0000",
+    fillOpacity: 0.35,
+  });
+
+  // 將多邊形添加到地圖
+  bermudaTriangle.setMap(map)
+
+  // 將新多邊形保存到數組中
+  polygons.value.push(bermudaTriangle)
+}
+
+/** 搜尋地點 */
 const findPlaces = async (text = '台灣') => {
   const request = {
     textQuery: text, // 搜尋牛肉麵
@@ -66,9 +90,7 @@ const findPlaces = async (text = '台灣') => {
     useStrictTypeFiltering: false,
   }
   const { Place } = await google.maps.importLibrary('places')
-  //@ts-ignore
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
-  //@ts-ignore
   const { places } = await Place.searchByText(request)
 
   if (places.length) {
@@ -96,7 +118,8 @@ const findPlaces = async (text = '台灣') => {
 
 defineExpose({
   addMarker,
-  findPlaces,
+  addPolygon,
+  findPlaces
 })
 </script>
 <template>

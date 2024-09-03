@@ -9,7 +9,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '',
+    default: '輸入搜尋',
     required: false,
   },
 })
