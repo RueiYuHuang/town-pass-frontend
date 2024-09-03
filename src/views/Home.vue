@@ -5,7 +5,7 @@ import { useCounterStore } from '../stores/useCountStore.js'
 import { ref, onMounted } from 'vue'
 
 import CommonSearch from '@/components/common/Search.vue'
-
+import CommonList from '@/components/common/List.vue'
 import CommonTabRow from '@/components/common/TabRow/index.vue'
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 
@@ -98,5 +98,9 @@ const selectedPlace = (data) => {
       <button @click="clearPolygon" class="rounded border p-1">刪除區域</button>
     </div>
     <GoogleMap ref="mapRef" :center="position" :zoom="15" />
+    <div style="width: 90%; margin: auto;">
+      <CommonList title="我是標題"></CommonList>
+      <CommonList title="我是標題"></CommonList>
+    </div>
   </div>
 </template>
