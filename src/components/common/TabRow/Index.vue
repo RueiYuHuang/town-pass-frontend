@@ -9,19 +9,47 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'submit'])
 
-const activeBtn = ref(props.modelValue)
-const setActiveBtn = (data) => {
-  activeBtn.value = data
-}
-watch(activeBtn, (newValue) => {
-  emit('update:modelValue', newValue)
-  emit('submit', newValue)
-})
+const activeValue = ref(props.modelValue)
+const tabRowRef = ref(null)
+const indicatorStyle = ref({})
 
-provide('activeItem', { activeBtn, setActiveBtn })
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    activeValue.value = newValue
+  },
+)
+
+const updateIndicator = (element) => {
+  const parentWidth = tabRowRef.value.offsetWidth
+  const widthPercentage = (element.value.offsetWidth / parentWidth) * 100
+  const leftPercentage = (element.value.offsetLeft / parentWidth) * 100
+  indicatorStyle.value = {
+    width: `${widthPercentage}%`,
+    left: `${leftPercentage}%`,
+  }
+}
+
+const setActiveValue = (data) => {
+  emit('update:modelValue', data)
+  emit('submit', data)
+}
+
+provide('tabRow', { activeValue, setActiveValue, updateIndicator })
 </script>
 <template>
-  <div class="flex h-12 items-center justify-center gap-2 border-b border-grey-400 px-2">
-    <slot />
+  <div class="relative overflow-hidden border-b border-grey-400">
+    <div ref="tabRowRef" class="flex h-12 items-center justify-center">
+      <slot />
+    </div>
+    <div
+      class="z- absolute bottom-0 w-full rounded-full border-2 border-primary-500 transition"
+      :style="indicatorStyle"
+    />
   </div>
 </template>
+<style lang="scss" scoped>
+.transition {
+  transition: left 0.5s;
+}
+</style>
