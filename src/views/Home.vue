@@ -6,12 +6,14 @@ import { ref, onMounted } from 'vue'
 
 import CommonSearch from '@/components/common/Search.vue'
 import CommonList from '@/components/common/List.vue'
+import CommonBtn from '@/components/common/Btn.vue'
 import CommonTabRow from '@/components/common/TabRow/index.vue'
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 
 import GoogleMap from '@/components/common/Google/Map.vue'
 import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
-
+import CommonCheckbox from '@/components/common/Checkbox.vue'
+import CommonGoogleMap from '@/components/common/GoogleMap.vue'
 const counterSrore = useCounterStore()
 const { increment } = counterSrore
 const { count } = storeToRefs(counterSrore)
@@ -72,6 +74,15 @@ const selectedPlace = (data) => {
   console.log('selectedPlace:', data)
   mapRef.value.addMarker(data.location, data.address, data.name)
 }
+const aaa = (val) => {
+  console.log(val)
+}
+const bbb = () => {
+  console.log(123)
+}
+const reject = (val) => {
+  console.log("reject")
+}
 </script>
 <template>
   <div>
@@ -101,6 +112,8 @@ const selectedPlace = (data) => {
     <div style="width: 90%; margin: auto;">
       <CommonList title="我是標題"></CommonList>
       <CommonList title="我是標題"></CommonList>
+      <CommonCheckbox @submit="aaa"></CommonCheckbox>
+      <CommonBtn :do-some-thing="bbb" :reject="reject"/>
     </div>
   </div>
 </template>

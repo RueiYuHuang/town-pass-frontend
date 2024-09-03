@@ -14,12 +14,12 @@ const props = defineProps({
 })
 const showList = ref(false)
 const setShowList = () => {
-  console.log(123)
+
   showList.value = !showList.value
 }
 </script>
 <template>
-  <div class="relative mb-3">
+  <div class="relative">
     <div class="list-header" @click="setShowList()">
       {{  title  }}
       <div class="transition-time" :class="{'arrow-up': showList}">
@@ -36,6 +36,8 @@ const setShowList = () => {
 </template>
 <style lang="scss" scoped>
   .list-header {
+    user-select: none;
+    cursor: pointer;
     width: 100%;
     background: white;
     box-shadow: 1px 1px 1px 1px black;
@@ -62,14 +64,14 @@ const setShowList = () => {
     width: 100%;
     max-height: 0;
     opacity: 0;
-    padding-top: 1rem;
+    overflow: hidden;
     padding-left: 3rem;
     transition: .5s;
     position: relative;
     &::before {
       position: absolute;
       content: "";
-      background-color: black;
+      background-color: rgb(90 180 197);
       height: calc(100% - 10px);
       top: 0;
       width: 5px;
@@ -78,6 +80,7 @@ const setShowList = () => {
 
   }
   .show-list {
+    padding-top: 1rem;
     max-height: 100%;
     opacity: 1;
 
@@ -88,7 +91,7 @@ const setShowList = () => {
       content: "";
       width: 12px;
       height: 4px;
-      background-color: black;
+      background-color: rgb(90 180 197);
       position: absolute;
       left: -20px;
       top: 0;
