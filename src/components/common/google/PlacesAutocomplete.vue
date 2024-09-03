@@ -18,7 +18,7 @@ const emit = defineEmits(['update:modelValue', 'submit'])
 const inputRef = ref(null)
 const selectedPlace = ref({})
 
-async function initMap() {
+const initMap = async () => {
   const { Autocomplete } = await google.maps.importLibrary('places')
 
   const autocomplete = new Autocomplete(inputRef.value)
@@ -34,7 +34,7 @@ async function initMap() {
       location: {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
-      }
+      },
     }
     emit('submit', selectedPlace.value)
   })
