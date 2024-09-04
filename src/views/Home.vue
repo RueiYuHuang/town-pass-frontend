@@ -13,7 +13,6 @@ import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 import GoogleMap from '@/components/common/Google/Map.vue'
 import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
 import CommonCheckbox from '@/components/common/Checkbox.vue'
-import CommonGoogleMap from '@/components/common/GoogleMap.vue'
 const counterSrore = useCounterStore()
 const { increment } = counterSrore
 const { count } = storeToRefs(counterSrore)
