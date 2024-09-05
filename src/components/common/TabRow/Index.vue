@@ -43,13 +43,13 @@ provide('tabRow', { activeValue, setActiveValue, updateIndicator })
       <slot />
     </div>
     <div
-      class="z- absolute bottom-0 w-full rounded-full border-2 border-primary-500 transition"
+      class="z- transition-left absolute bottom-0 w-full rounded-full border-2 border-primary-500 duration-500"
       :style="indicatorStyle"
     />
   </div>
 </template>
 <style lang="scss" scoped>
-.transition {
-  transition: left 0.5s;
+.transition-left {
+  transition-property: left;
 }
 </style>

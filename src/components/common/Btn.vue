@@ -1,53 +1,39 @@
 <script setup>
-import { watch, ref } from 'vue'
+import { computed } from 'vue'
 const props = defineProps({
-  doSomeThing: {
-    type: Function,
-    default: () => {}, // 默认值为空函数
-    required: true,
+  type: {
+    type: String,
+    default: '',
+    required: false,
   },
-  reject: {
-    type: Function,
-    default: () => {}, // 默认值为空函数
+  disabled: {
+    type: Boolean,
+    default: false,
     required: false,
   },
 })
 
+const btnstyle = computed(() => {
+  switch (props.type) {
+    case 'primary':
+      return ['bg-primary-500', 'text-white', 'hover:bg-primary-600', 'active:bg-primary-500']
+    case 'secondary':
+      return ['border', 'bg-white', 'text-primary-500', 'hover:bg-primary-50', 'active:bg-white']
+    case 'danger':
+      return ['bg-red-500', 'text-white', 'hover:bg-red-300', 'active:bg-red-500']
+    case 'warning':
+      return ['bg-orange-500', 'text-white', 'hover:bg-orange-300', 'active:bg-orange-500']
+    default:
+      return ['bg-primary-500', 'text-white', 'hover:bg-primary-600', 'cursor-not-allowed', 'active:bg-primary-500']
+  }
+})
 </script>
 <template>
-  <div class="flex">
-    <button class="reject-btn btn-style"  @click="props.reject()">返回</button>
-    <div class="mx-2"></div>
-    <button class="do-some-thing-btn btn-style"  @click="props.doSomeThing()">確認</button>
-  </div>
-
+  <button
+    class="h-12 cursor-pointer rounded-[10px] px-3 disabled:cursor-not-allowed disabled:bg-grey-100 disabled:text-grey-500"
+    :class="btnstyle"
+    :disabled="disabled"
+  >
+    <slot />
+  </button>
 </template>
-<style lang="scss" scoped>
-    .btn-style {
-        font-size: 24px;
-        border-radius: 15px;
-        padding: 5px;
-        cursor: pointer;
-    }
-    .reject-btn {
-        width: 30%;
-        border: 1px solid rgb(90 180 197);
-        color: rgb(90 180 197);
-        transition: .5s;
-        &:hover {
-            background-color: rgb(90 180 197);
-            color: white;
-        }
-    }
-    .do-some-thing-btn {
-        width: 70%;
-        background-color: rgb(90 180 197);;
-        border: 1px solid rgb(90 180 197);
-        color: white;
-        transition: .5s;
-        &:hover {
-            background-color: white;
-            color: rgb(90 180 197);
-        }
-    }
-</style>

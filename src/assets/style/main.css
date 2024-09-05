@@ -16,7 +16,9 @@
 } */
 
 :root {
-  --primary-500: #5ab4c5;
-  --bg-grey-50: #edf8fa;
+  --bg-primary-500: #5ab4c5;
+  --bg-grey-50: #f1f3f4;
+  --bg-grey-100: #e3e7e9;
+  --bg-grey-500: #738995;
   --bg-grey-800: #30383d;
 }
