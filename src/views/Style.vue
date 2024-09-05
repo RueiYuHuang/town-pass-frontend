@@ -19,14 +19,18 @@ import CommonRadio from '@/components/common/Radio.vue'
 import GoogleMap from '@/components/common/Google/Map.vue'
 import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
 
-// inputSearch
+// input
 const inputData = ref('')
+// inputSearch
+const inputSearchData = ref('')
 const searchSubmit = (data) => {
   console.log('searchSubmit:', data)
 }
+// inputRadio
+const inputRadioDate = ref('radio1')
 
 // tabData
-const tabData = ref('1')
+const tabData = ref('tab1')
 const tabSubmit = (data) => {
   console.log('tabSubmit:', data)
 }
@@ -77,36 +81,37 @@ const bbb = () => {
 const reject = (val) => {
   console.log('reject')
 }
-const radioDate = ref('2')
 </script>
 <template>
   <div>
     <RouterLink to="/">Back HOME</RouterLink>
     <h1>Style</h1>
     <div></div>
-    <div class="font-bold">Button:</div>
+    <div class="font-bold mt-2">Button:</div>
     <div>
       <CommonBtn class="m-1" type="primary">primary</CommonBtn>
-      <CommonBtn class="m-1" type="secondary">secondlary</CommonBtn>
+      <CommonBtn class="m-1" type="secondary">secondary</CommonBtn>
       <CommonBtn class="m-1" type="danger">danger</CommonBtn>
       <CommonBtn class="m-1" type="warning">warning</CommonBtn>
       <CommonBtn class="m-1" disabled>disabled</CommonBtn>
     </div>
-    <div class="font-bold">Input:</div>
+    <div class="font-bold mt-2">Input: {{ inputData }}</div>
     <div class="m-1">
-      <CommonInput />
+      <CommonInput v-model="inputData" />
     </div>
-    <CommonInputSearch class="m-1" v-model="inputData" @submit="searchSubmit" />
-    <CommonRadio v-model="radioDate" value="1">radio1</CommonRadio>
-    <CommonRadio v-model="radioDate" value="2">radio2</CommonRadio>
-    <div>TabRow:{{ tabData }}</div>
+    <div class="font-bold mt-2">InputSearch: {{ inputSearchData }}</div>
+    <CommonInputSearch class="m-1" v-model="inputSearchData" @submit="searchSubmit" />
+    <div class="font-bold mt-2">InputRadio: {{ inputRadioDate }}</div>
+    <CommonRadio v-model="inputRadioDate" value="radio1">radio1</CommonRadio>
+    <CommonRadio v-model="inputRadioDate" value="radio2">radio2</CommonRadio>
+    <div class="font-bold mt-2">TabRow: {{ tabData }}</div>
     <CommonTabRow v-model="tabData" @submit="tabSubmit">
-      <CommonTabRowBtn value="1">通報</CommonTabRowBtn>
-      <CommonTabRowBtn value="2">查詢</CommonTabRowBtn>
+      <CommonTabRowBtn value="tab1">tab1</CommonTabRowBtn>
+      <CommonTabRowBtn value="tab2">tab2</CommonTabRowBtn>
     </CommonTabRow>
-    <div>Google Places Autocomplete: {{ placeData }}</div>
+    <div class="font-bold mt-2">Google Places Autocomplete: {{ placeData }}</div>
     <GooglePlacesAutocomplete class="m-2" v-model="placeData" @submit="selectedPlace" />
-    <div>Google Map:</div>
+    <div class="font-bold mt-2">Google Map:</div>
     <div>
       <CommonBtn @click="addMarker" class="m-1">新增標記</CommonBtn>
       <CommonBtn @click="clearMarker" class="m-1">刪除標記</CommonBtn>

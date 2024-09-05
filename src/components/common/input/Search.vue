@@ -42,7 +42,7 @@ const clearInput = () => {
       />
     </div>
     <div
-      class="flex aspect-square h-full cursor-pointer items-center justify-center rounded-[10px] bg-primary-500 hover:bg-primary-600"
+      class="flex aspect-square h-full cursor-pointer items-center justify-center rounded-[10px] bg-primary-500 hover:bg-primary-600 active:bg-primary-500"
       @click="handleSubmit"
     >
       <img alt="magnifier" class="h-7" :src="iconMagnifier" />
