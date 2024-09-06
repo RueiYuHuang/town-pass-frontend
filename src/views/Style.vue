@@ -12,8 +12,8 @@ import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 // Input
 import CommonInput from '@/components/common/input/Index.vue'
 import CommonInputSearch from '@/components/common/input/Search.vue'
-import CommonCheckbox from '@/components/common/Checkbox.vue'
 import CommonRadio from '@/components/common/Radio.vue'
+import CommonCheckbox from '@/components/common/CheckboxV2.vue'
 
 // Google
 import GoogleMap from '@/components/common/Google/Map.vue'
@@ -28,6 +28,8 @@ const searchSubmit = (data) => {
 }
 // inputRadio
 const inputRadioDate = ref('radio1')
+// inputcheckbox
+const inputCheckboxDate = ref(['checkbox1'])
 
 // tabData
 const tabData = ref('tab1')
@@ -104,6 +106,9 @@ const reject = (val) => {
     <div class="font-bold mt-2">InputRadio: {{ inputRadioDate }}</div>
     <CommonRadio v-model="inputRadioDate" value="radio1">radio1</CommonRadio>
     <CommonRadio v-model="inputRadioDate" value="radio2">radio2</CommonRadio>
+    <div class="font-bold mt-2">InputCheckbox: {{ inputCheckboxDate }}</div>
+    <CommonCheckbox v-model="inputCheckboxDate" value="checkbox1">checkbox1</CommonCheckbox>
+    <CommonCheckbox v-model="inputCheckboxDate" value="checkbox2">checkbox2</CommonCheckbox>
     <div class="font-bold mt-2">TabRow: {{ tabData }}</div>
     <CommonTabRow v-model="tabData" @submit="tabSubmit">
       <CommonTabRowBtn value="tab1">tab1</CommonTabRowBtn>
@@ -121,10 +126,9 @@ const reject = (val) => {
     </div>
     <GoogleMap ref="mapRef" :center="position" :zoom="15" />
 
-    <div style="width: 90%; margin: auto">
+    <div class="pt-2" style="width: 90%; margin: auto">
       <CommonList title="我是標題"></CommonList>
-      <CommonList title="我是標題"></CommonList>
-      <CommonCheckbox @submit="aaa"></CommonCheckbox>
+      <!-- <CommonCheckbox @submit="aaa"></CommonCheckbox> -->
     </div>
   </div>
 </template>

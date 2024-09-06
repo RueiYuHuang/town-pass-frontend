@@ -16,9 +16,10 @@
 } */
 
 :root {
-  --bg-primary-500: #5ab4c5;
-  --bg-grey-50: #f1f3f4;
-  --bg-grey-100: #e3e7e9;
-  --bg-grey-500: #738995;
-  --bg-grey-800: #30383d;
+  --primary-500: #5ab4c5;
+  --grey-50: #f1f3f4;
+  --grey-100: #e3e7e9;
+  --grey-500: #738995;
+  --grey-800: #30383d;
+  --white: #FFFFFF;
 }
