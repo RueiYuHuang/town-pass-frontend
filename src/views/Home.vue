@@ -44,13 +44,13 @@ const loading = ref(false)
 const moreLoading = ref(false)
 const query = ref({
   page:'1',
-  per_page: '6',
+  per_page: '15',
   location: []
 })
 const tabData = ref('tab1');
 const pages = ref({
   page: 1,
-  per_page: 6,
+  per_page: 15,
 })
 const lastPage = ref(1)
 const data = ref([])
