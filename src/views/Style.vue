@@ -6,7 +6,7 @@ import CommonList from '@/components/common/List.vue'
 import CommonBtn from '@/components/common/Btn.vue'
 
 // TabRow
-import CommonTabRow from '@/components/common/TabRow/index.vue'
+import CommonTabRow from '@/components/common/TabRow/Index.vue'
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 
 // Input
