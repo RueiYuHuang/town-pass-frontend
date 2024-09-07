@@ -63,7 +63,7 @@ onMounted(() => {
 import CommonRadio from '@/components/common/Radio.vue'
 import CommonInput from '@/components/common/input/Index.vue'
 import CommonBtn from '@/components/common/Btn.vue'
-import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
+import GooglePlacesAutocomplete from '@/components/common/google/PlacesAutocomplete.vue'
 const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
