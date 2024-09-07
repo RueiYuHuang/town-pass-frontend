@@ -10,7 +10,7 @@ import axios from 'axios'
 
 // 創建一個 axios 實例
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 })
 // 設定請求攔截器
 instance.interceptors.request.use(
