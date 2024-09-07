@@ -36,14 +36,15 @@ const initMap = async () => {
         lng: place.geometry.location.lng(),
       },
     }
+    
     emit('submit', selectedPlace.value)
   })
 }
 
-const clearInput = () => {
-  selectedPlace.value = {}
-  emit('update:modelValue', '')
-}
+// const clearInput = () => {
+//   selectedPlace.value = {}
+//   emit('update:modelValue', '')
+// }
 
 onMounted(() => {
   initMap()
@@ -64,13 +65,13 @@ defineExpose({
         :placeholder="placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
       />
-      <img
+      <!-- <img
         v-if="modelValue.length"
         alt="magnifier"
         class="absolute right-2 top-1/2 h-4 -translate-y-1/2 cursor-pointer"
         :src="iconXmark"
         @click="clearInput"
-      />
+      /> -->
     </div>
   </div>
 </template>
