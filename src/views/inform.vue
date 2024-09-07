@@ -173,7 +173,7 @@ const goBack = () => {
             新增附件
           </div>
           <div>
-            <img src="../../../Public/info.png" style="height: 24px;">
+            <img src="../../../public/info.png" style="height: 24px;">
           </div>
         </div>
         <div class="lh-sm mb-2">
