@@ -252,7 +252,10 @@ const handleSubmit = async () => {
     Swal.fire({
       title: '您已成功送出',
       icon: 'success'
-    });
+    })
+    .then(() => {
+      router.push('/')
+    })
     endLoading()
   } catch (error) {
     endLoading()
