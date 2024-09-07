@@ -324,7 +324,10 @@ onBeforeUnmount(() => {
         <div v-if="moreLoading">
           <img src="/loading.gif" class="black m-auto" style="width: 50px;">
         </div>
-        <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm">新增回報</CommonBtn>
+        <div style="text-align: center;margin-bottom: 1rem;">
+          <CommonBtn class="w-full m-5 mb-10" style="width: 75%; margin: auto;" @click="handleNewForm">新增回報</CommonBtn>
+        </div>
+   
         </div>
     </div>
         <div v-if="tabData === 'tab2'">
