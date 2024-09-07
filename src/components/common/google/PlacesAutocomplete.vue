@@ -36,7 +36,8 @@ const initMap = async () => {
         lng: place.geometry.location.lng(),
       },
     }
-    
+
+    emit('update:modelValue', selectedPlace.value.address)
     emit('submit', selectedPlace.value)
   })
 }

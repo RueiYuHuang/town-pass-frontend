@@ -2,6 +2,9 @@
 <script setup>
 import axios from '../utils/axios'
 import Swal from 'sweetalert2'
+import LayoutDefault from '@/components/layout/Default.vue'
+import CommonHeaderBack from '@/components/common/header/Back.vue'
+import iconXmark from '@/assets/icon/xmark.svg'
 
 import { ref, onMounted, nextTick } from 'vue'
 const content = ref(null)
@@ -15,14 +18,21 @@ const selectedPlace = (data) => {
     lat.value = data.location.lat
     lng.value = data.location.lng
 }
+const geocoderLocation = ref({
+})
 const getAddressFromCoordinates = (location) => {
   const geocoder = new google.maps.Geocoder();
   const latLng = new google.maps.LatLng(location.lat, location.lng);
+  geocoderLocation.value = {
+    lat: location.lat,
+    lng: location.lng
+  }
+
 
   geocoder.geocode({ location: latLng }, (results, status) => {
     if (status === 'OK' && results[0]) {
-        placeData.value = results[0].formatted_address
-      console.log('地址:',  placeData.value);
+        newform.value.address = results[0].formatted_address
+      console.log('地址:',  newform.value.address);
     } else {
       handleGeocodeError();
     }
@@ -67,6 +77,7 @@ const checkValue = ref(false)
 const showSelectModel = () => {
   showModal.value = true
 }
+
 const submitData = () => {
     let payload = {
         tilte: title.value,
@@ -74,7 +85,7 @@ const submitData = () => {
         agree: agree.value,
         gps_longitude: lng.value,
         gps_latitude: lat.value,
-        address:  placeData.value
+        address: placeData.value
     }
     checkValue.value = true
 
@@ -112,23 +123,134 @@ const lat = ref(null)
 const lng = ref(null)
 
 const title = ref(null)
-const agree = ref(true)
 const goBack = () => {
     window.history.back();
 }
+
+const initialNewform = ref({
+  title: null,
+  content: null,
+  country: null,
+  city: null,
+  district: null,
+  address: null,
+  gps_longitude: null,
+  gps_latitude: null,
+  files: null
+})
+const newform = ref({
+  title: null,
+  content: null,
+  country: null,
+  city: null,
+  district: null,
+  address: null,
+  gps_longitude: null,
+  gps_latitude: null,
+  files: null
+})
+const agree = ref(false)
+const files = ref([]);
+const fileInput = ref(null);
+const placesRef = ref(null);
+
+// 新增檔案
+const triggerFileInput = () => {
+  fileInput.value.click()
+};
+
+// 選擇檔案
+const handleFileChange = (event) => {
+  const selectedFiles = Array.from(event.target.files);
+  const imageFiles = selectedFiles.filter(file => file.type.startsWith('image/'));
+
+  if (selectedFiles.length !== imageFiles.length) {
+    alert('Only image files are allowed');
+  }
+
+  imageFiles.forEach(file => {
+    // Create a preview URL for each file
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      files.value.push({
+        file,
+        previewUrl: e.target.result
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+const removeFile = (index) => {
+  files.value.splice(index, 1);
+};
+
+const handleSubmit = async () => {
+  try {
+    console.log('newform', newform.value);
+    checkValue.value = true
+    if (!newform.value.title || !newform.value.content || !newform.value.address) {
+      Swal.fire({
+        title: '請填寫完整表單',
+        icon: 'warning'
+      });
+      return
+    }
+    if (!agree.value) {
+      Swal.fire({
+        title: '未同意提供個人資料',
+        icon: 'warning'
+      });
+      return
+    }
+    const formData = new FormData();
+    if (files.value.length) {
+      files.value.forEach((fileItem) => {
+        formData.append('files[]', fileItem.file);
+      })
+    }
+    if (newform.value.title) { formData.append('title', newform.value.title) }
+    if (newform.value.content) { formData.append('content', newform.value.content) }
+    if (newform.value.country) { formData.append('country', newform.value.country) }
+    if (newform.value.city) { formData.append('city', newform.value.city) }
+    if (newform.value.district) { formData.append('district', newform.value.district) }
+    if (newform.value.address) { formData.append('address', newform.value.address) }
+
+    if (Object.keys(placesRef.value.selectedPlace).length) {
+      formData.append('gps_latitude', placesRef.value.selectedPlace.location.lat)
+      formData.append('gps_longitude', placesRef.value.selectedPlace.location.lng)
+    } else if(Object.keys(geocoderLocation.value).length) {
+      formData.append('gps_latitude', geocoderLocation.value.lat)
+      formData.append('gps_longitude', geocoderLocation.value.lng)
+    }
+
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    const response = await axios.post('/api/post', formData)
+    checkValue.value = false
+    newform.value = {...initialNewform.value}
+    files.value = []
+    geocoderLocation.value = {}
+    Swal.fire({
+      title: '您已成功送出',
+      icon: 'success'
+    });
+
+  } catch (error) {
+    alert('An error occurred during file upload');
+  }
+}
 </script>
 <template>
-  <div>
-    <div class="mobile-header">
-      <div class="w-33 arrow-style">
-        <img src="../../../public/black-arrow.png" height="20px" @click="goBack()" />
-      </div>
-      <div class="w-33 text-center header-mobile-text">案件內容</div>
-      <div class="w-33"> </div>
-    </div>
+  <LayoutDefault>
+    <template #header>
+      <CommonHeaderBack @click="goBack()">案件內容</CommonHeaderBack>
+    </template>
+    <div>
     <div class="mobile-content">
       <div class="mb-3">
-        <div class="mb-2">
+        <div class="mb-2 font-bold">
           案件內容
         </div>
         <div>
@@ -140,11 +262,11 @@ const goBack = () => {
             發生地點
         </div>
         <div class="relative">
-          <GooglePlacesAutocomplete class="m-2" placeholder="可直接訂位或輸入完整地址" v-model="placeData" @submit="selectedPlace" />
+          <GooglePlacesAutocomplete ref="placesRef" placeholder="可直接定位或輸入完整地址" v-model="newform.address" />
           <div class="img-map-position" @click="getUserLocation()">
             <img src="../../../public/map.png">
           </div>
-          <div  v-if="checkValue && !placeData" class="require-field">發生地點為必填</div>
+          <div v-if="checkValue && !newform.address" class="require-field">發生地點為必填</div>
         </div>
       </div>
       <div class="mb-3">
@@ -152,54 +274,72 @@ const goBack = () => {
           案件主旨
         </div>
         <div>
-          <CommonInput placeholder="請輸入主旨" v-model="title" />
+          <CommonInput placeholder="請輸入主旨" v-model="newform.title" />
         </div>
-        <div v-if="checkValue && !title" class="require-field">案件主旨為必填</div>
+        <div v-if="checkValue && !newform.title" class="require-field">案件主旨為必填</div>
       </div>
       <div class="mb-3">
         <div class="mb-2 require">
           描述
         </div>
         <div>
-          <textarea placeholder="人、事、時、地、物4000字以內" v-model="content" rows="8"
+          <textarea placeholder="人、事、時、地、物4000字以內" v-model="newform.content" rows="8"
             class="content-textarea w-full rounded-[10px] bg-grey py-0.5 caret-primary-500 placeholder:text-grey-400 text-left align-top focus:outline-none">
           </textarea>
         </div>
-        <div v-if="checkValue && !content" class="require-field">描述為必填</div>
+        <div v-if="checkValue && !newform.content" class="require-field">描述為必填</div>
       </div>
       <div class="pb-3">
         <div class="mb-2 content-icon-text">
-          <div>
-            新增附件
+          <div class="require">
+            新增圖片
           </div>
           <div>
             <img src="../../../Public/info.png" style="height: 24px;">
           </div>
         </div>
+        <div v-if="checkValue && !files.length" class="require-field">至少上傳一張圖片</div>
         <div class="lh-sm mb-2">
           <small class="max-ten-lh">
-            最多上傳<br>
-            10個檔案
+            最多上傳 {{ files.length }}/5個檔案
           </small>
         </div>
-        <div class="content-upload-btn">
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
+        <!-- 上傳圖片 -->
+        <div class="grid grid-cols-3 gap-4">
+          <template v-if="files.length > 0">
+            <div v-for="(file, index) in files" :key="index" class="w-full aspect-square relative">
+              <img :src="file.previewUrl" alt="Preview" class="w-full h-full object-cover rounded-[10px]" />
+              <img
+                class="absolute -right-2 -top-2 h-6  cursor-pointer"
+                :src="iconXmark"
+                @click="removeFile(index)"
+              />
+            </div>
+          </template>
+          <div v-if="files.length < 5" class="w-full flex justify-center items-center flex-col aspect-square relative bg-grey-50 rounded-[10px]" @click="triggerFileInput">
+            <span>+</span>
+            <span>上傳檔案</span>
+          </div>
         </div>
+        <input type="file" ref="fileInput" class="hidden"  @change="handleFileChange" capture multiple accept="image/*" />
+        <!-- <div class="content-upload-btn">
+          <label class="upload-btn" @click="showSelectModel()">
+            +<br>
+            上傳檔案
+          </label>
+          <label class="upload-btn" @click="showSelectModel()">
+            +<br>
+            上傳檔案
+          </label>
+          <label class="upload-btn" @click="showSelectModel()">
+            +<br>
+            上傳檔案
+          </label>
+          <label class="upload-btn" @click="showSelectModel()">
+            +<br>
+            上傳檔案
+          </label>
+        </div> -->
       </div>
       <div class="submit-btn-style">
         <div class="mb-3 submit-btn-header text-primary-500">
@@ -214,15 +354,15 @@ const goBack = () => {
           <CommonRadio v-model="agree" :value="true">同意</CommonRadio>
           <CommonRadio v-model="agree" :value="false">不同意</CommonRadio>
         </div>
-        <div class="flex">
+        <!-- <div class="flex">
           <CommonBtn class="w-30" type="secondary">取消</CommonBtn>
           <div class="mx-2"></div>
           <CommonBtn class="w-65" type="primary" @click="submitData()">送出</CommonBtn>
-        </div>
+        </div> -->
       </div>
 
     </div>
-    <div class="select-model-bg" :class="{'op-1': showModal}">
+    <!-- <div class="select-model-bg" :class="{'op-1': showModal}">
       <div class="relative h-full">
         <div class="model-position">
           <div class="select-model">
@@ -250,8 +390,16 @@ const goBack = () => {
         </div>
 
       </div>
-    </div>
+    </div> -->
   </div>
+    <template #action>
+      <div class="w-full flex gap-2 m-5 mb-10">
+        <CommonBtn class="w-1/3" type="secondary">取消</CommonBtn>
+        <CommonBtn class="w-full" type="primary" @click="handleSubmit">送出</CommonBtn>
+      </div>
+    </template>
+  </LayoutDefault>
+
 </template>
 <style lang="scss"  scoped>
 .mobile-header {
@@ -284,7 +432,8 @@ const goBack = () => {
 }
 
 .mobile-content {
-  padding-top: 62px;
+  // padding-top: 62px;
+  margin: 20px 0 40px;
   padding-left: 24px;
   padding-right: 24px;
 

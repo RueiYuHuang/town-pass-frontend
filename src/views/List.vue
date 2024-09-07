@@ -43,6 +43,10 @@ const closeWindow = () => {
 onMounted(async () => {
   await fetchInit()
 })
+
+const handleNewForm = (data) => {
+  router.push('/inform')
+}
 </script>
 <template>
   <LayoutDefault>
@@ -60,7 +64,7 @@ onMounted(async () => {
       </CommonCard>
     </div>
     <template #action>
-      <CommonBtn class="w-full m-5 mb-10">新增回報</CommonBtn>
+      <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm">新增回報</CommonBtn>
     </template>
   </LayoutDefault>
 </template>
