@@ -45,7 +45,7 @@ const moreLoading = ref(false)
 const query = ref({
   page:'1',
   per_page: '15',
-  location: []
+  district: []
 })
 const tabData = ref('tab1');
 const pages = ref({
@@ -209,7 +209,8 @@ const initChartDogAndCat = () => {
   const submitData = async() => {
     showModal.value = false
     loading.value = true;
-    query.value.location = selectList.value
+    query.value.page = 1
+    query.value.district = selectList.value
     const res = await axios.get('/api/posts', { params: query.value})
     loading.value = false;
     data.value = res.data.data
