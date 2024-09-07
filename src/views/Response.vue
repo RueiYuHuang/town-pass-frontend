@@ -10,9 +10,9 @@
             <p class="title">發現位置：台北市中山南京東路三段105號</p>
             <p class="description">有隻貓在小區花園的長椅下打盹，虎斑的毛，很乾淨，不像流浪貓。</p>
             <div class="response_content_img">
-                <img src="../../../public/cat01.jpeg" alt="">
-                <img src="../../../public/cat01.jpeg" alt="">
-                <img src="../../../public/cat01.jpeg" alt="">
+                <img src="/cat01.jpeg" alt="">
+                <img src="/cat01.jpeg" alt="">
+                <img src="/cat01.jpeg" alt="">
             </div>
             <p class="description">B1: 昨天 04:09</p>
         </div>

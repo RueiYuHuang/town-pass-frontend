@@ -5,13 +5,13 @@ import Swal from 'sweetalert2'
 import LayoutDefault from '@/components/layout/Default.vue'
 import CommonHeaderBack from '@/components/common/header/Back.vue'
 import iconXmark from '@/assets/icon/xmark.svg'
+import { useRouter } from 'vue-router'
 
 import { ref, onMounted, nextTick } from 'vue'
 const content = ref(null)
 const imageList = ref([])
 
 const placeData = ref(null)
-// const getLocationData = ref(null)
 const selectedPlace = (data) => {
     console.log(data)
     placeData.value = data.address
@@ -123,8 +123,18 @@ const lat = ref(null)
 const lng = ref(null)
 
 const title = ref(null)
-const goBack = () => {
-    window.history.back();
+const router = useRouter()
+const goBack = async () => {
+  const result = await Swal.fire({
+    title: '請問是否要離開寵物遺失通報？',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '確認',
+    cancelButtonText: '取消'
+  })
+  if (result.isConfirmed) {
+    router.back()
+  } 
 }
 
 const initialNewform = ref({
@@ -245,7 +255,7 @@ const handleSubmit = async () => {
 <template>
   <LayoutDefault>
     <template #header>
-      <CommonHeaderBack @click="goBack()">案件內容</CommonHeaderBack>
+      <CommonHeaderBack @submit="goBack">案件內容</CommonHeaderBack>
     </template>
     <div>
     <div class="mobile-content">
@@ -264,7 +274,7 @@ const handleSubmit = async () => {
         <div class="relative">
           <GooglePlacesAutocomplete ref="placesRef" placeholder="可直接定位或輸入完整地址" v-model="newform.address" />
           <div class="img-map-position" @click="getUserLocation()">
-            <img src="../../../public/map.png">
+            <img src="/map.png">
           </div>
           <div v-if="checkValue && !newform.address" class="require-field">發生地點為必填</div>
         </div>
@@ -295,7 +305,7 @@ const handleSubmit = async () => {
             新增圖片
           </div>
           <div>
-            <img src="../../../Public/info.png" style="height: 24px;">
+            <img src="/info.png" style="height: 24px;">
           </div>
         </div>
         <div v-if="checkValue && !files.length" class="require-field">至少上傳一張圖片</div>
@@ -394,7 +404,7 @@ const handleSubmit = async () => {
   </div>
     <template #action>
       <div class="w-full flex gap-2 m-5 mb-10">
-        <CommonBtn class="w-1/3" type="secondary">取消</CommonBtn>
+        <CommonBtn class="w-1/3" type="secondary" @click="goBack">取消</CommonBtn>
         <CommonBtn class="w-full" type="primary" @click="handleSubmit">送出</CommonBtn>
       </div>
     </template>
