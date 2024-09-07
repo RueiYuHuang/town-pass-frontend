@@ -12,6 +12,18 @@ import GoogleMap from '@/components/common/google/Map.vue'
 
 import CommonBtn from '@/components/common/Btn.vue'
 
+import axios from '../utils/axios' // Add
+import Response from './Response.vue' // Add
+const animalResponses = ref([]) // Add
+const fetchAnimalResponses = async () => { // Add
+  try {
+    const response = await axios.get(`/api/post/${cardData.value.id}/reply`)  // Replace with your actual API endpoint
+    animalResponses.value = response.data
+  } catch (error) {
+    console.error("Failed to fetch animal data:", error)
+  }
+}
+
 const cardSrore = useCardStore()
 const { cardData } = storeToRefs(cardSrore)
 
@@ -19,6 +31,9 @@ console.log('cardData:', cardData.value)
 const router = useRouter()
 const linkBack = () => {
   router.back()
+}
+const handleNewForm = () => {
+  router.push('/return')
 }
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 const data = ref({
@@ -32,6 +47,7 @@ const mapRef = ref(null)
 onMounted(() => {
   selectImgSrc.value = `${baseUrl}${cardData.value.files[0].url}`
   mapRef.value.addMarker({ lat: Number(cardData.value.gps_latitude), lng: Number(cardData.value.gps_longitude) })
+   fetchAnimalResponses()
 })
 const selectedImg = (data) => {
   console.log('selectedImg')
@@ -61,9 +77,17 @@ const selectedImg = (data) => {
         <GoogleMap ref="mapRef" :center="{ lat: Number(cardData.gps_latitude), lng: Number(cardData.gps_longitude) }" :zoom="15" />
       </div>
       <p class="my-2 font-bold">更多回覆： </p>
+      <!-- Add  Start -->
+      <div style="padding-bottom: 124px;">
+        <div v-for="(animal, index) in animalResponses.data" :key="index">
+        <Response :animal="animal" :index="index" />
+      </div>
+      </div>
+
+      <!-- Add  End -->
     </div>
     <template #action>
-      <CommonBtn class="w-full m-5 mb-10">新增回報地點</CommonBtn>
+      <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm()">新增回報地點</CommonBtn>
     </template>
   </LayoutDefault>
 </template>

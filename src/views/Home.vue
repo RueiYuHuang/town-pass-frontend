@@ -12,11 +12,14 @@ import CommonTabRow from '@/components/common/TabRow/Index.vue';
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue';
 import CommonBtn from '@/components/common/Btn.vue'
 import CommonCard from '@/components/common/Card.vue'
-
+import { useConnectionMessage } from '@/composables/useConnectionMessage';
 const cardSrore = useCardStore()
 const { setCardData } = cardSrore
 const { cardData } = storeToRefs(cardSrore)
-
+function callFlutter(action, data = null) {
+  useConnectionMessage(action, data)
+};
+callFlutter("userinfo", null)
 const router = useRouter()
 const handleDetail = (data) => {
   console.log('data', data)
@@ -308,23 +311,10 @@ onBeforeUnmount(() => {
             </template>
           </CommonCard>
         </div>
-        <div v-if="loading">
-          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
-        </div>
-        <div v-else>
-          <div class="grid grid-cols-2 gap-4 p-4">
-            <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
-              {{ item.title }}  
-              <template #action>
-                <CommonBtn class="w-full m-2" type="secondary" @click="handleDetail(item)" >查看更多</CommonBtn>
-              </template>
-            </CommonCard>
-          </div>
-        </div>
-        <div v-if="moreLoading">
-          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
-        </div>
       </div>
+      <div v-if="moreLoading">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
+        </div>
     </div>
     <div v-if="tabData === 'tab2'">
       <div style="padding-left: 24px; padding-right: 24px;">
