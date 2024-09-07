@@ -324,31 +324,28 @@ onBeforeUnmount(() => {
         <div v-if="moreLoading">
           <img src="/loading.gif" class="black m-auto" style="width: 50px;">
         </div>
-        <div style="text-align: center" class="add-report">
-          <CommonBtn class="w-full m-5 mb-10" style="width: 75%; margin: auto;" @click="handleNewForm">新增回報</CommonBtn>
-        </div>
-   
-        </div>
+      </div>
     </div>
-        <div v-if="tabData === 'tab2'">
-          <div style="padding-left: 24px; padding-right: 24px;">
-            <div>
-              <div class="flex w-full pt-5" style="justify-content: space-around;">
-                <div class="select-btn" @click="selectChartFn('all')" :class="{'active-select': selectChart === 'all'}">流浪犬貓統計/領養</div>
-                <div  class="select-btn"  @click="selectChartFn('only')"  :class="{'active-select': selectChart === 'only'}">流浪犬貓認養數</div>
-              </div>
-   
-            </div>
-            <div v-if="selectChart === 'all'">
-              <div ref="chartContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
-            </div>
-            <div v-else>
-              <div ref="chartDogAndCatContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
-            </div>
+    <div v-if="tabData === 'tab2'">
+      <div style="padding-left: 24px; padding-right: 24px;">
+        <div>
+          <div class="flex w-full pt-5" style="justify-content: space-around;">
+            <div class="select-btn" @click="selectChartFn('all')" :class="{'active-select': selectChart === 'all'}">流浪犬貓統計/領養</div>
+            <div  class="select-btn"  @click="selectChartFn('only')"  :class="{'active-select': selectChart === 'only'}">流浪犬貓認養數</div>
           </div>
 
         </div>
-
+        <div v-if="selectChart === 'all'">
+          <div ref="chartContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
+        </div>
+        <div v-else>
+          <div ref="chartDogAndCatContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
+        </div>
+      </div>
+    </div>
+    <template #action>
+      <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm">新增回報</CommonBtn>
+    </template>
   </LayoutDefault>
 </template>
 <style lang="scss" scoped>
