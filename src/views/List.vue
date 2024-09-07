@@ -229,10 +229,10 @@ onBeforeUnmount(() => {
       <div v-if="tabData === 'tab1'">
 
         <div class="pt-5 mr-5">
-          <img src="../../../public/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
+          <img src="/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
         </div>
         <div v-if="loading">
-          <img src="../../../public/loading.gif" class="black m-auto" style="width: 50px;">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
         </div>
         <div v-else>
           <div class="grid grid-cols-2 gap-4 p-4">
@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-if="moreLoading">
-          <img src="../../../public/loading.gif" class="black m-auto" style="width: 50px;">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
         </div>
 
         </div>

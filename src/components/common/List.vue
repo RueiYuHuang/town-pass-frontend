@@ -22,7 +22,7 @@ const setShowList = () => {
     <div class="list-header" @click="setShowList()">
       {{ title }}
       <div class="transition-time" :class="{ 'arrow-up': showList }">
-        <img src="../../../public/black-arrow.png" height="20px" />
+        <img src="/black-arrow.png" height="20px" />
       </div>
     </div>
     <div class="list-content" :class="{ 'show-list': showList }">
