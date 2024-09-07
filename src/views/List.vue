@@ -183,7 +183,7 @@ const initChartDogAndCat = () => {
     if (selectList.value.includes(val)) {
       selectList.value = selectList.value.filter(district => district !== val);
     } else {
-      selectList.value.concat(val)
+      selectList.value.push(val)
     }
   }
   // 监听 tabData 的变化
