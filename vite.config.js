@@ -1,17 +1,27 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { createHtmlPlugin } from 'vite-plugin-html';
 import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          googleMapsApiKey: process.env.VITE_GOOGLE_MAPS_API_KEY,
+        },
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
-    host: '0.0.0.0',
-    port: 3001,
+    host: process.env.VITE_HOST_URL,
+    port: process.env.VITE_HOST_PORT,
   },
 })

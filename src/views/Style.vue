@@ -6,7 +6,7 @@ import CommonList from '@/components/common/List.vue'
 import CommonBtn from '@/components/common/Btn.vue'
 
 // TabRow
-import CommonTabRow from '@/components/common/TabRow/index.vue'
+import CommonTabRow from '@/components/common/TabRow/Index.vue'
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 
 // Input
@@ -16,8 +16,8 @@ import CommonRadio from '@/components/common/Radio.vue'
 import CommonCheckbox from '@/components/common/CheckboxV2.vue'
 
 // Google
-import GoogleMap from '@/components/common/Google/Map.vue'
-import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
+import GoogleMap from '@/components/common/google/Map.vue'
+import GooglePlacesAutocomplete from '@/components/common/google/PlacesAutocomplete.vue'
 
 // input
 const inputData = ref('')
