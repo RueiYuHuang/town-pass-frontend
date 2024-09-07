@@ -44,13 +44,13 @@ const loading = ref(false)
 const moreLoading = ref(false)
 const query = ref({
   page:'1',
-  per_page: '15',
+  per_page: '6',
   location: []
 })
 const tabData = ref('tab1');
 const pages = ref({
   page: 1,
-  per_page: 15,
+  per_page: 6,
 })
 const lastPage = ref(1)
 const data = ref([])
@@ -219,7 +219,11 @@ const initChartDogAndCat = () => {
     query.value.page = page
     const res = await axios.get('/api/posts', { params: query.value})
     moreLoading.value = false
-    data.value.push(res.data.data) 
+
+    let all = res.data.data
+    all.forEach((value, index) => {
+      data.value.push(value)
+    })
 
   }
   const handleScroll = () => {
