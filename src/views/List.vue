@@ -62,9 +62,6 @@ const closeWindow = () => {
   window.close();
 }
 onMounted(async () => {
-  if (tabData.value === 'tab1') {
-      updateChart();
-    }
   await fetchInit()
 })
 
@@ -75,60 +72,107 @@ const chartContainer = ref(null);
   // 图表实例
   let chart = null;
   
-  // 初始化图表
-  const initChart = () => {
-    if (chart) {
-      chart.dispose(); // 销毁旧的图表实例
-    }
-  
-    if (chartContainer.value) {
-      chart = echarts.init(chartContainer.value);
-      const option = {
-        title: {
-            text: ' '
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['走失貓犬通報數', '走失貓犬領回數']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
+// 初始化图表
+const initChart = () => {
+  if (chart) {
+    chart.dispose(); // 销毁旧的图表实例
+  }
 
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['107年度', '108年度', '109年度', '110年度', '111年度', '112年度', '113年度']
+  if (chartContainer.value) {
+    chart = echarts.init(chartContainer.value);
+    const option = {
+      title: {
+        text: ' '
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['流浪貓犬認養數', '流浪貓犬統計數']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['105年度', '106年度', '107年度', '108年度', '109年度', '110年度', '111年度']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: '流浪貓犬統計數',
+          type: 'line',
+          data: [3182, 2713, 2565, 2645, 2316, 1998, 2004] // 修正：數字格式
         },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-            name: '走失貓犬通報數',
-            type: 'line',
-            stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-            name: '走失貓犬領回數',
-            type: 'line',
-            stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310]
-            },
-
-
-        ]
+        {
+          name: '流浪貓犬認養數',
+          type: 'line',
+          data: [1871, 1799, 1719, 1824, 1580, 1315, 1371] // 修正：數字格式
+        }
+      ]
     };
-      chart.setOption(option);
-    }
-  };
+    chart.setOption(option);
+  }
+};
+
+const selectChart = ref('all')
+
+const chartDogAndCatContainer = ref(null);
+  // 图表实例
+  let chartDogAndCat = null;
   
+// 初始化图表
+const initChartDogAndCat = () => {
+  if (chartDogAndCatContainer.value) {
+    chartDogAndCat = echarts.init(chartDogAndCatContainer.value);
+    const option = {
+      title: {
+        text: ' '
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['流浪犬認養數', '流浪貓認養數']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['105年度', '106年度', '107年度', '108年度', '109年度', '110年度', '111年度']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: '流浪犬認養數',
+          type: 'line',
+          data: [981, 750, 638, 478, 399, 323, 260] // 修正：數字格式
+        },
+        {
+          name: '流浪貓認養數',
+          type: 'line',
+          data: [1409, 1328, 1467, 1195, 1193, 1108, 1111] // 修正：數字格式
+        }
+      ]
+    };
+    chartDogAndCat.setOption(option);
+  }
+};
+
+
   // 在选项卡数据变化时更新图表
   const updateChart = async () => {
     await nextTick();
@@ -139,7 +183,7 @@ const chartContainer = ref(null);
     if (selectList.value.includes(val)) {
       selectList.value = selectList.value.filter(district => district !== val);
     } else {
-      selectList.value.push(val)
+      selectList.value.concat(val)
     }
   }
   // 监听 tabData 的变化
@@ -149,6 +193,15 @@ const chartContainer = ref(null);
     }
   }, { immediate: true });
   
+  watch(() => selectChart.value, async(newValue) => {
+    await nextTick();
+    if (newValue === 'all') {
+      initChart();
+    } else {
+      initChartDogAndCat();
+    }
+  }, { immediate: true });
+
   const showModal = ref(false)
   const submitData = async() => {
     showModal.value = false
@@ -178,6 +231,9 @@ const chartContainer = ref(null);
   
     }
   };
+  const selectChartFn = (val) => {
+    selectChart.value = val
+  }
 
 // 生命週期鉤子
 onMounted(() => {
@@ -252,20 +308,44 @@ onBeforeUnmount(() => {
             </template>
           </CommonCard>
         </div>
-      </div>
-      <div v-if="moreLoading">
-        <img src="/loading.gif" class="black m-auto" style="width: 50px;">
-      </div>
+        <div v-if="loading">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
+        </div>
+        <div v-else>
+          <div class="grid grid-cols-2 gap-4 p-4">
+            <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
+              {{ item.title }}  
+              <template #action>
+                <CommonBtn class="w-full m-2" type="secondary" @click="handleDetail(item)" >查看更多</CommonBtn>
+              </template>
+            </CommonCard>
+          </div>
+        </div>
+        <div v-if="moreLoading">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
+        </div>
+        <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm">新增回報</CommonBtn>
+        </div>
     </div>
-    <div v-if="tabData === 'tab2'">
-      <div style="padding-left: 24px; padding-right: 24px;">
-        <div ref="chartContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
-      </div>
-    </div>
-    <div class="h-28"></div>
-    <template #action>
-      <CommonBtn class="w-full m-5 mb-10" @click="handleNewForm">新增回報</CommonBtn>
-    </template>
+        <div v-if="tabData === 'tab2'">
+          <div style="padding-left: 24px; padding-right: 24px;">
+            <div>
+              <div class="flex w-full pt-5" style="justify-content: space-around;">
+                <div class="select-btn" @click="selectChartFn('all')" :class="{'active-select': selectChart === 'all'}">流浪犬貓統計/領養</div>
+                <div  class="select-btn"  @click="selectChartFn('only')"  :class="{'active-select': selectChart === 'only'}">流浪犬貓認養數</div>
+              </div>
+   
+            </div>
+            <div v-if="selectChart === 'all'">
+              <div ref="chartContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
+            </div>
+            <div v-else>
+              <div ref="chartDogAndCatContainer" style="width: 100%; height: 400px; margin-top: 3rem;"></div>
+            </div>
+          </div>
+
+        </div>
+
   </LayoutDefault>
 </template>
 <style lang="scss" scoped>
@@ -332,5 +412,18 @@ onBeforeUnmount(() => {
   .btn-border {
     padding-top: 1rem;
     border-top: 1px solid #EDEDED;
+  }
+  .select-btn {
+    border: 1px solid  #F4B992;
+    width: 45%;
+    padding: 10px;
+    border-radius: 15px;
+    color: #F4B992;
+    text-align: center;
+  }
+  .active-select {
+    background-color: #F4B992 !important;
+    color: white !important;
+    font-weight: bold;
   }
 </style>
