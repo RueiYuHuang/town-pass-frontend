@@ -1,7 +1,4 @@
 <script setup>
-defineProps({
-
-})
 </script>
 <template>
   <div class="fixed flex justify-center items-center w-screen h-screen z-50 bg-loading">

@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 export const useLoading = (defaultLoading) => {
   const loading = ref(defaultLoading || false)
   const loadings = ref({})

@@ -23,3 +23,22 @@
   --grey-800: #30383d;
   --white: #FFFFFF;
 }
+
+.swal2-actions {
+  flex-direction: row-reverse; /* 對調按鈕位置 */
+}
+.swal2-confirm {
+  background-color: var(--primary-500) !important;
+  color: var(--white) !important;
+  box-shadow: none; /* 移除陰影 */
+  font-size: inherit; /* 使用繼承的字體大小 */
+  border-radius: 10px;
+}
+.swal2-cancel {
+  background-color: var(--white) !important; /* 移除背景顏色 */
+  color: var(--primary-500) !important; /* 使用繼承的文本顏色 */
+  border: 1px solid var(--primary-500) !important; /* 移除邊框 */
+  box-shadow: none; /* 移除陰影 */
+  font-size: inherit; /* 使用繼承的字體大小 */
+  border-radius: 10px;
+}

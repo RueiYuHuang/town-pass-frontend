@@ -3,13 +3,19 @@ import axios from '../utils/axios'
 import Swal from 'sweetalert2'
 import LayoutDefault from '@/components/layout/Default.vue'
 import CommonHeaderBack from '@/components/common/header/Back.vue'
+import CommonLoading from '@/components/common/Loading.vue'
 import iconXmark from '@/assets/icon/xmark.svg'
 import { useRouter } from 'vue-router'
-
+import { useLoading } from '@/composables/useLoading';
 import { ref, onMounted, nextTick } from 'vue'
+import CommonRadio from '@/components/common/Radio.vue'
+import CommonInput from '@/components/common/input/Index.vue'
+import CommonBtn from '@/components/common/Btn.vue'
+import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
+
 const content = ref(null)
 const imageList = ref([])
-
+const { loading, startLoading, endLoading } = useLoading()
 const placeData = ref(null)
 const selectedPlace = (data) => {
     console.log(data)
@@ -19,7 +25,7 @@ const selectedPlace = (data) => {
 }
 const geocoderLocation = ref({
 })
-const getAddressFromCoordinates = (location) => {
+const getAddressFromCoordinates = async (location) => {
   const geocoder = new google.maps.Geocoder();
   const latLng = new google.maps.LatLng(location.lat, location.lng);
   geocoderLocation.value = {
@@ -27,8 +33,7 @@ const getAddressFromCoordinates = (location) => {
     lng: location.lng
   }
 
-
-  geocoder.geocode({ location: latLng }, (results, status) => {
+  await geocoder.geocode({ location: latLng }, (results, status) => {
     if (status === 'OK' && results[0]) {
         newform.value.address = results[0].formatted_address
       console.log('地址:',  newform.value.address);
@@ -46,25 +51,25 @@ onMounted(() => {
     document.body.appendChild(script);
   }
 });
-import CommonRadio from '@/components/common/Radio.vue'
-import CommonInput from '@/components/common/input/Index.vue'
-import CommonBtn from '@/components/common/Btn.vue'
-import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
-const getUserLocation = () => {
+
+const getUserLocation = async () => {
     if (navigator.geolocation) {
+      startLoading()
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
           lat.value = userLocation.lat
           lng.value = userLocation.lng
-          getAddressFromCoordinates(userLocation)
+          await getAddressFromCoordinates(userLocation)
+          endLoading()
         }
       );
     } else {
-      handleLocationError(false);
+      handleLocationError(false)
+      endLoading()
     }
 
 }
@@ -196,6 +201,7 @@ const removeFile = (index) => {
 
 const handleSubmit = async () => {
   try {
+    startLoading()
     console.log('newform', newform.value);
     checkValue.value = true
     if (!newform.value.title || !newform.value.content || !newform.value.address) {
@@ -203,6 +209,7 @@ const handleSubmit = async () => {
         title: '請填寫完整表單',
         icon: 'warning'
       });
+      endLoading()
       return
     }
     if (!agree.value) {
@@ -210,6 +217,7 @@ const handleSubmit = async () => {
         title: '未同意提供個人資料',
         icon: 'warning'
       });
+      endLoading()
       return
     }
     const formData = new FormData();
@@ -245,13 +253,15 @@ const handleSubmit = async () => {
       title: '您已成功送出',
       icon: 'success'
     });
-
+    endLoading()
   } catch (error) {
+    endLoading()
     alert('An error occurred during file upload');
   }
 }
 </script>
 <template>
+  <CommonLoading v-if="loading" />
   <LayoutDefault>
     <template #header>
       <CommonHeaderBack @submit="goBack">案件內容</CommonHeaderBack>

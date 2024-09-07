@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
       padding-left: 20px;
       padding-right: 20px;
       display: flex;
-      transition: 2s;
+      transition: .5s;
       flex-direction: column;
       justify-content: space-between;
     }

@@ -2,13 +2,13 @@
 import { watch, ref } from 'vue'
 const props = defineProps({
   modelValue: {
-    type: [Object, String, Number],
-    default: null,
+    type: [Object, String, Number, Boolean],
+    default: '',
     required: true,
   },
   value: {
-    type: [Object, String, Number],
-    default: null,
+    type: [Object, String, Number, Boolean],
+    default: '',
     required: true,
   },
   disabled: {
