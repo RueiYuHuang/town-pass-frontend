@@ -42,7 +42,7 @@ const selectedImg = (data) => {
 <template>
   <LayoutDefault>
     <template #header>
-      <CommonHeaderBack @click="linkBack">寵物資訊</CommonHeaderBack>
+      <!-- <CommonHeaderBack @click="linkBack">寵物資訊</CommonHeaderBack> -->
     </template>
     <div class="p-4">
       <p class="font-bold">發生時間：{{ transDate(cardData.created_at) }}</p>

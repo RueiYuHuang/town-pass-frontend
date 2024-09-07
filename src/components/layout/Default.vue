@@ -5,7 +5,7 @@
     <div class="fixed w-full top-0 bg-primary-500 z-40">
       <slot name="header" />
     </div>
-    <div class="h-12" />
+    <!-- <div class="h-12" /> -->
     <div>
       <slot />
     </div>

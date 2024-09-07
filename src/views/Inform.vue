@@ -130,7 +130,7 @@ const title = ref(null)
 const router = useRouter()
 const goBack = async () => {
   const result = await Swal.fire({
-    title: '請問是否要離開寵物遺失通報？',
+    title: '請問是否要離開新增回報？',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: '確認',
@@ -264,7 +264,7 @@ const handleSubmit = async () => {
   <CommonLoading v-if="loading" />
   <LayoutDefault>
     <template #header>
-      <CommonHeaderBack @submit="goBack">案件內容</CommonHeaderBack>
+      <!-- <CommonHeaderBack @submit="goBack">新增回報</CommonHeaderBack> -->
     </template>
     <div>
     <div class="mobile-content">

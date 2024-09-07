@@ -1,5 +1,5 @@
 <script setup>
-import axios from '../utils/axios'
+import axios from '../utils/axios.js'
 import { storeToRefs } from 'pinia'
 import { useCounterStore } from '../stores/useCountStore.js'
 import { ref, onMounted } from 'vue'

@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <template #header>
-      <CommonHeaderClose @submit="closeWindow">寵物遺失通報</CommonHeaderClose>
+      <!-- <CommonHeaderClose @submit="closeWindow">寵物遺失通報</CommonHeaderClose> -->
     </template>
     <!-- <div v-if="data.length" class="grid grid-cols-2 gap-4 p-4">
       <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
