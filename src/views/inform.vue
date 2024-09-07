@@ -121,7 +121,7 @@ const goBack = () => {
   <div>
     <div class="mobile-header">
       <div class="w-33 arrow-style">
-        <img src="../../../public/black-arrow.png" height="20px" @click="goBack()" />
+        <img src="/black-arrow.png" height="20px" @click="goBack()" />
       </div>
       <div class="w-33 text-center header-mobile-text">案件內容</div>
       <div class="w-33"> </div>
@@ -142,7 +142,7 @@ const goBack = () => {
         <div class="relative">
           <GooglePlacesAutocomplete class="m-2" placeholder="可直接訂位或輸入完整地址" v-model="placeData" @submit="selectedPlace" />
           <div class="img-map-position" @click="getUserLocation()">
-            <img src="../../../public/map.png">
+            <img src="/map.png">
           </div>
           <div  v-if="checkValue && !placeData" class="require-field">發生地點為必填</div>
         </div>
@@ -173,7 +173,7 @@ const goBack = () => {
             新增附件
           </div>
           <div>
-            <img src="../../../public/info.png" style="height: 24px;">
+            <img src="/info.png" style="height: 24px;">
           </div>
         </div>
         <div class="lh-sm mb-2">
