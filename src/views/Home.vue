@@ -280,17 +280,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-    <template #header>
-      <!-- <CommonHeaderClose @submit="closeWindow">寵物遺失通報</CommonHeaderClose> -->
-    </template>
-    <!-- <div v-if="data.length" class="grid grid-cols-2 gap-4 p-4">
-      <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
-        {{ item.title }}  
-        <template #action>
-          <CommonBtn class="w-full m-2" type="secondary" @click="handleDetail(item)" >查看更多</CommonBtn>
-        </template>
-      </CommonCard>
-    </div> -->
+
     <CommonTabRow v-model="tabData">
       <CommonTabRowBtn value="tab1">寵物遺失瀏覽</CommonTabRowBtn>
       <CommonTabRowBtn value="tab2">寵物遺失統計</CommonTabRowBtn>
