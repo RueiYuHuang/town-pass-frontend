@@ -59,7 +59,7 @@ const fetchInit = async () => {
   const res = await axios.get('/api/posts', { params: query.value})
   loading.value = false
   data.value = res.data.data
-  // lastPage.value = res.data.meta.last_page
+  lastPage.value = res.data.meta.last_page
 }
 const closeWindow = () => {
   window.close();
