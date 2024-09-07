@@ -423,6 +423,7 @@ onBeforeUnmount(() => {
     border-radius: 15px;
     color: #F4B992;
     text-align: center;
+    white-space: nowrap;
   }
   .active-select {
     background-color: #F4B992 !important;
