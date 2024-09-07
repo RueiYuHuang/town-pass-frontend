@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
       <CommonTabRowBtn value="tab1">寵物遺失瀏覽</CommonTabRowBtn>
       <CommonTabRowBtn value="tab2">寵物遺失統計</CommonTabRowBtn>
     </CommonTabRow>
-    <div v-if="tabData === 'tab1'">
+    <div v-if="tabData === 'tab1'" style="padding-bottom: 88px">
       <div class="pt-5 mr-5">
         <img src="/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
       </div>
@@ -324,7 +324,7 @@ onBeforeUnmount(() => {
         <div v-if="moreLoading">
           <img src="/loading.gif" class="black m-auto" style="width: 50px;">
         </div>
-        <div style="text-align: center;margin-bottom: 1rem;">
+        <div style="text-align: center" class="add-report">
           <CommonBtn class="w-full m-5 mb-10" style="width: 75%; margin: auto;" @click="handleNewForm">新增回報</CommonBtn>
         </div>
    
@@ -429,5 +429,14 @@ onBeforeUnmount(() => {
     background-color: #F4B992 !important;
     color: white !important;
     font-weight: bold;
+  }
+  .add-report {
+    text-align: center;
+    /* margin-bottom: 1rem; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
   }
 </style>
