@@ -12,6 +12,11 @@ const props = defineProps({
     default: 12,
     required: false,
   },
+  select: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
 })
 
 // 創建一个 ref 來綁定地圖容器
@@ -28,8 +33,13 @@ const initMap = async () => {
   map = new Map(mapContainer.value, mapOptions)
 
   // 為地圖添加點擊事件監聽器
-  map.addListener('click', (event) => {
-    addMarker(event.latLng)
+  map.addListener('click', async (event) => {
+    if (!props.select) { return }
+    const position = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng()
+    }
+    await addMarker(position)
   })
 }
 onMounted(async () => {
@@ -40,7 +50,6 @@ onMounted(async () => {
 const markers = ref([])
 const markersInfo = ref([])
 const addMarker = async (position, address = null, name) => {
-  clearMarkers() // 在添加新標記前清除所有標記
 
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
   const marker = new AdvancedMarkerElement({
@@ -105,7 +114,6 @@ const getMarkers = () => {
 /** 設定區域 */
 const polygons = ref([])
 const addPolygon = (triangleCoords) => {
-  clearPolygons() // 在添加新區域前清除所有區域
 
   const bermudaTriangle = new google.maps.Polygon({
     paths: triangleCoords,

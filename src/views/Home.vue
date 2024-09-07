@@ -18,7 +18,12 @@ onMounted(async () => {
 <template>
   <div>
     <h1>Home</h1>
-    <RouterLink to="/style">To Style</RouterLink>
+    <div>
+      <RouterLink to="/style">To Style</RouterLink>
+    </div>
+    <div>
+      <RouterLink to="/list">To List</RouterLink>
+    </div>
     <p>Count is: {{ count }}</p>
     <button class="border-black rounded border p-1" @click="increment">Increment</button>
     <div>{{ data }}</div>

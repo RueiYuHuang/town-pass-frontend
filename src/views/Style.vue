@@ -6,7 +6,7 @@ import CommonList from '@/components/common/List.vue'
 import CommonBtn from '@/components/common/Btn.vue'
 
 // TabRow
-import CommonTabRow from '@/components/common/TabRow/index.vue'
+import CommonTabRow from '@/components/common/TabRow/Index.vue'
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue'
 
 // Input
@@ -15,9 +15,12 @@ import CommonInputSearch from '@/components/common/input/Search.vue'
 import CommonRadio from '@/components/common/Radio.vue'
 import CommonCheckbox from '@/components/common/CheckboxV2.vue'
 
+// Card 
+import CommonCard from '@/components/common/Card.vue'
+
 // Google
-import GoogleMap from '@/components/common/Google/Map.vue'
-import GooglePlacesAutocomplete from '@/components/common/Google/PlacesAutocomplete.vue'
+import GoogleMap from '@/components/common/google/Map.vue'
+import GooglePlacesAutocomplete from '@/components/common/google/PlacesAutocomplete.vue'
 
 // input
 const inputData = ref('')
@@ -88,7 +91,10 @@ const reject = (val) => {
   <div>
     <RouterLink to="/">Back HOME</RouterLink>
     <h1>Style</h1>
-    <div></div>
+    <div class="font-bold mt-2">Card:</div>
+    <div class="w-1/2">
+      <CommonCard />
+    </div>
     <div class="font-bold mt-2">Button:</div>
     <div>
       <CommonBtn class="m-1" type="primary">primary</CommonBtn>
@@ -124,7 +130,7 @@ const reject = (val) => {
       <CommonBtn @click="addPolygon" class="m-1">新增區域</CommonBtn>
       <CommonBtn @click="clearPolygon" class="m-1">刪除區域</CommonBtn>
     </div>
-    <GoogleMap ref="mapRef" :center="position" :zoom="15" />
+    <GoogleMap ref="mapRef" :center="position" :zoom="15" select />
 
     <div class="pt-2" style="width: 90%; margin: auto">
       <CommonList title="我是標題"></CommonList>
