@@ -63,7 +63,7 @@ const selectedImg = (data) => {
       <p class="my-2 font-bold">更多回覆： </p>
     </div>
     <template #action>
-      <CommonBtn class="w-full m-4">新增回報地點</CommonBtn>
+      <CommonBtn class="w-full m-5 mb-10">新增回報地點</CommonBtn>
     </template>
   </LayoutDefault>
 </template>

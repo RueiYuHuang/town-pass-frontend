@@ -59,6 +59,9 @@ onMounted(async () => {
         </template>
       </CommonCard>
     </div>
+    <template #action>
+      <CommonBtn class="w-full m-5 mb-10">新增回報</CommonBtn>
+    </template>
   </LayoutDefault>
 </template>
 <style lang="scss" scoped>
