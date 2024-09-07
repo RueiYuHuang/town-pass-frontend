@@ -209,6 +209,7 @@ const initChartDogAndCat = () => {
   const submitData = async() => {
     showModal.value = false
     loading.value = true;
+    query.value.page = 1
     query.value.district = selectList.value
     const res = await axios.get('/api/posts', { params: query.value})
     loading.value = false;
