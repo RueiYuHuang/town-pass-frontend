@@ -10,7 +10,7 @@ const props = defineProps({
 const pages= ref({
   page: "1"
 })
-const baseUrl = import.meta.env.VITE_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 const imgSrc = ref(`${baseUrl}${props.img}`)
 </script>
 <template>

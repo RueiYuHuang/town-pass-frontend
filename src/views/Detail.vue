@@ -20,7 +20,7 @@ const router = useRouter()
 const linkBack = () => {
   router.back()
 }
-const baseUrl = import.meta.env.VITE_BASE_URL
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 const data = ref({
   location: '',
   title: '',
