@@ -219,7 +219,11 @@ const initChartDogAndCat = () => {
     query.value.page = page
     const res = await axios.get('/api/posts', { params: query.value})
     moreLoading.value = false
-    data.value.push(res.data.data) 
+
+    let all = res.data.data
+    all.forEach((value, index) => {
+      data.value.push(value)
+    })
 
   }
   const handleScroll = () => {
