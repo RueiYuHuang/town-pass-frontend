@@ -262,9 +262,9 @@ const handleSubmit = async () => {
 </script>
 <template>
   <LayoutDefault>
-    <template #header>
+    <!-- <template #header>
       <CommonHeaderBack @submit="goBack">{{ cardData.title }}</CommonHeaderBack>
-    </template>
+    </template> -->
     <div>
     <div class="mobile-content">
       <div class="mb-3">
