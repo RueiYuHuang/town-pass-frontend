@@ -24,13 +24,6 @@ const fetchAnimalResponses = async () => { // Add
       const animal = animalResponses.value.data[i]
       mapRef.value.addMarker({ lat: Number(animal.gps_latitude), lng: Number(animal.gps_longitude) })
     }
-    mapRef.value.addPolygon(
-      [{ lat: Number(cardData.value.gps_latitude), lng: Number(cardData.value.gps_longitude)}].concat(
-      animalResponses.value.data.map((animal) => ({
-        lat: Number(animal.gps_latitude),
-        lng: Number(animal.gps_longitude),
-      })))
-    )
   } catch (error) {
     console.error("Failed to fetch animal data:", error)
   }
