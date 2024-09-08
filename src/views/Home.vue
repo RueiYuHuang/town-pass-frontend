@@ -236,7 +236,10 @@ const initChartDogAndCat = () => {
       if (pages.value.page <= lastPage.value && !moreLoading.value) {
         getOtherPageData(pages.value.page)
       }
-  
+    }
+    if (scrollTop <= 0 && !loading.value) {
+      fetchInit()
+
     }
   };
   const selectChartFn = (val) => {
