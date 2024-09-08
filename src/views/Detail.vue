@@ -30,7 +30,7 @@ const { cardData } = storeToRefs(cardSrore)
 console.log('cardData:', cardData.value)
 const router = useRouter()
 const linkBack = () => {
-  router.back()
+  router.push('/')
 }
 const handleNewForm = () => {
   router.push('/return')

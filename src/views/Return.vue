@@ -138,7 +138,7 @@ const lng = ref(null)
 const title = ref(null)
 const router = useRouter()
 const goBack = () => {
-    router.back()
+    router.push('/detail')
 }
 
 const initialNewform = ref({
@@ -253,7 +253,7 @@ const handleSubmit = async () => {
       icon: 'success'
     })
     .then(() => {
-        router.back()
+        router.push('/detail')
     })
   } catch (error) {
     alert('An error occurred during file upload');
