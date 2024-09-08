@@ -6,7 +6,7 @@ import DebugView from '@/views/Debug.vue'
 import DetailView from '@/views/Detail.vue'
 import InformView  from '@/views/Inform.vue'
 import ResponseView  from '@/views/Response.vue'
-
+import ReturnView  from '@/views/Return.vue'
 
 
 const routes = [
@@ -37,8 +37,9 @@ const routes = [
   { 
     path: '/response',
     component: ResponseView,
-    meta: { title: 'Response Page' }
-  }
+    meta: { title: '查看更多' }
+  },
+  { path: '/return', component: ReturnView, meta: { title: '回覆貼文' } }
 ]
 
 const router = createRouter({

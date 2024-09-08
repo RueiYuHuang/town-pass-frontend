@@ -19,13 +19,13 @@ export const useConnectionMessage = <T>(name: string, data: T) => {
     
     // @ts-ignore
     try{
-      alert(postInfo);
+      // alert(postInfo);
       flutterObject.postMessage(postInfo);
     }catch(e){
-      alert(e.message);
+      // alert(e.message);
     }
 
   }else{
-    alert('flutterObject is not defined');
+    // alert('flutterObject is not defined');
   }
 };

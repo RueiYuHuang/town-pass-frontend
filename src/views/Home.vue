@@ -12,11 +12,14 @@ import CommonTabRow from '@/components/common/TabRow/Index.vue';
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue';
 import CommonBtn from '@/components/common/Btn.vue'
 import CommonCard from '@/components/common/Card.vue'
-
+import { useConnectionMessage } from '@/composables/useConnectionMessage';
 const cardSrore = useCardStore()
 const { setCardData } = cardSrore
 const { cardData } = storeToRefs(cardSrore)
-
+function callFlutter(action, data = null) {
+  useConnectionMessage(action, data)
+};
+callFlutter("userinfo", null)
 const router = useRouter()
 const handleDetail = (data) => {
   console.log('data', data)
@@ -42,7 +45,7 @@ const moreLoading = ref(false)
 const query = ref({
   page:'1',
   per_page: '15',
-  location: []
+  district: []
 })
 const tabData = ref('tab1');
 const pages = ref({
@@ -56,13 +59,14 @@ const fetchInit = async () => {
   const res = await axios.get('/api/posts', { params: query.value})
   loading.value = false
   data.value = res.data.data
-  // lastPage.value = res.data.meta.last_page
+  lastPage.value = res.data.meta.last_page
 }
 const closeWindow = () => {
   window.close();
 }
 onMounted(async () => {
   await fetchInit()
+  history.replaceState(null, '', window.location.href);
 })
 
 const handleNewForm = (data) => {
@@ -206,7 +210,8 @@ const initChartDogAndCat = () => {
   const submitData = async() => {
     showModal.value = false
     loading.value = true;
-    query.value.location = selectList.value
+    query.value.page = 1
+    query.value.district = selectList.value
     const res = await axios.get('/api/posts', { params: query.value})
     loading.value = false;
     data.value = res.data.data
@@ -216,7 +221,11 @@ const initChartDogAndCat = () => {
     query.value.page = page
     const res = await axios.get('/api/posts', { params: query.value})
     moreLoading.value = false
-    data.value.push(res.data.data) 
+
+    let all = res.data.data
+    all.forEach((value, index) => {
+      data.value.push(value)
+    })
 
   }
   const handleScroll = () => {
@@ -228,8 +237,10 @@ const initChartDogAndCat = () => {
       if (pages.value.page <= lastPage.value && !moreLoading.value) {
         getOtherPageData(pages.value.page)
       }
-  
     }
+    // if (scrollTop <= 50 && !loading.value) {
+    //   fetchInit()
+    // }
   };
   const selectChartFn = (val) => {
     selectChart.value = val
@@ -277,23 +288,19 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-    <template #header>
-      <!-- <CommonHeaderClose @submit="closeWindow">寵物遺失通報</CommonHeaderClose> -->
-    </template>
-    <!-- <div v-if="data.length" class="grid grid-cols-2 gap-4 p-4">
-      <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
-        {{ item.title }}  
-        <template #action>
-          <CommonBtn class="w-full m-2" type="secondary" @click="handleDetail(item)" >查看更多</CommonBtn>
-        </template>
-      </CommonCard>
-    </div> -->
+
     <CommonTabRow v-model="tabData">
       <CommonTabRowBtn value="tab1">寵物遺失瀏覽</CommonTabRowBtn>
       <CommonTabRowBtn value="tab2">寵物遺失統計</CommonTabRowBtn>
     </CommonTabRow>
     <div v-if="tabData === 'tab1'" style="padding-bottom: 88px">
-      <div class="pt-5 mr-5">
+      <div class="pt-5 mr-5 flex">
+        <div class="pl-5" v-if="selectList.length > 0">
+          區域篩選: 
+          <span v-for="(select, index) in selectList" :key="select">
+            {{  select  }}  <span v-if="index+1 != selectList.length">、</span>
+          </span>
+        </div>
         <img src="/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
       </div>
       <div v-if="loading">
@@ -308,23 +315,10 @@ onBeforeUnmount(() => {
             </template>
           </CommonCard>
         </div>
-        <div v-if="loading">
-          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
-        </div>
-        <div v-else>
-          <div class="grid grid-cols-2 gap-4 p-4">
-            <CommonCard v-for="(item, index) in data" :key="index" :img="item.files[0].url">
-              {{ item.title }}  
-              <template #action>
-                <CommonBtn class="w-full m-2" type="secondary" @click="handleDetail(item)" >查看更多</CommonBtn>
-              </template>
-            </CommonCard>
-          </div>
-        </div>
-        <div v-if="moreLoading">
-          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
-        </div>
       </div>
+      <div v-if="moreLoading">
+          <img src="/loading.gif" class="black m-auto" style="width: 50px;">
+        </div>
     </div>
     <div v-if="tabData === 'tab2'">
       <div style="padding-left: 24px; padding-right: 24px;">

@@ -3,19 +3,27 @@ import axios from '../utils/axios'
 import Swal from 'sweetalert2'
 import LayoutDefault from '@/components/layout/Default.vue'
 import CommonHeaderBack from '@/components/common/header/Back.vue'
-import CommonLoading from '@/components/common/Loading.vue'
 import iconXmark from '@/assets/icon/xmark.svg'
 import { useRouter } from 'vue-router'
-import { useLoading } from '@/composables/useLoading';
-import { ref, onMounted, nextTick } from 'vue'
-import CommonRadio from '@/components/common/Radio.vue'
-import CommonInput from '@/components/common/input/Index.vue'
-import CommonBtn from '@/components/common/Btn.vue'
-import GooglePlacesAutocomplete from '@/components/common/google/PlacesAutocomplete.vue'
+import { storeToRefs } from 'pinia'
+import { useCardStore } from '../stores/useCardStore.js'
+import { useConnectionMessage } from '@/composables/useConnectionMessage';
+import { useHandleConnectionData } from '@/composables/useHandleConnectionData';
 
+import { ref, onMounted, nextTick } from 'vue'
+function callFlutter(action, data = null) {
+  useConnectionMessage(action, data)
+};
+// onMounted(async () => {
+//   useHandleConnectionData(handleLocation);
+//   const res = await axios.get('/api/posts')
+//   data.value = res.data
+// })
 const content = ref(null)
 const imageList = ref([])
-const { loading, startLoading, endLoading } = useLoading()
+const cardSrore = useCardStore()
+const { cardData } = storeToRefs(cardSrore)
+
 const placeData = ref(null)
 const selectedPlace = (data) => {
     console.log(data)
@@ -25,7 +33,7 @@ const selectedPlace = (data) => {
 }
 const geocoderLocation = ref({
 })
-const getAddressFromCoordinates = async (location) => {
+const getAddressFromCoordinates = (location) => {
   const geocoder = new google.maps.Geocoder();
   const latLng = new google.maps.LatLng(location.lat, location.lng);
   geocoderLocation.value = {
@@ -33,7 +41,8 @@ const getAddressFromCoordinates = async (location) => {
     lng: location.lng
   }
 
-  await geocoder.geocode({ location: latLng }, (results, status) => {
+
+  geocoder.geocode({ location: latLng }, (results, status) => {
     if (status === 'OK' && results[0]) {
         newform.value.address = results[0].formatted_address
       console.log('地址:',  newform.value.address);
@@ -51,25 +60,25 @@ onMounted(() => {
     document.body.appendChild(script);
   }
 });
-
-const getUserLocation = async () => {
+import CommonRadio from '@/components/common/Radio.vue'
+import CommonInput from '@/components/common/input/Index.vue'
+import CommonBtn from '@/components/common/Btn.vue'
+import GooglePlacesAutocomplete from '@/components/common/google/PlacesAutocomplete.vue'
+const getUserLocation = () => {
     if (navigator.geolocation) {
-      startLoading()
       navigator.geolocation.getCurrentPosition(
-        async (position) => {
+        (position) => {
           const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
           lat.value = userLocation.lat
           lng.value = userLocation.lng
-          await getAddressFromCoordinates(userLocation)
-          endLoading()
+          getAddressFromCoordinates(userLocation)
         }
       );
     } else {
-      handleLocationError(false)
-      endLoading()
+      handleLocationError(false);
     }
 
 }
@@ -128,17 +137,8 @@ const lng = ref(null)
 
 const title = ref(null)
 const router = useRouter()
-const goBack = async () => {
-  const result = await Swal.fire({
-    title: '請問是否要離開新增回報？',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: '確認',
-    cancelButtonText: '取消'
-  })
-  if (result.isConfirmed) {
-    router.push('/')
-  } 
+const goBack = () => {
+    router.push('/detail')
 }
 
 const initialNewform = ref({
@@ -201,7 +201,6 @@ const removeFile = (index) => {
 
 const handleSubmit = async () => {
   try {
-    startLoading()
     console.log('newform', newform.value);
     checkValue.value = true
     if (!newform.value.title || !newform.value.content || !newform.value.address) {
@@ -209,7 +208,6 @@ const handleSubmit = async () => {
         title: '請填寫完整表單',
         icon: 'warning'
       });
-      endLoading()
       return
     }
     if (!agree.value) {
@@ -217,7 +215,6 @@ const handleSubmit = async () => {
         title: '未同意提供個人資料',
         icon: 'warning'
       });
-      endLoading()
       return
     }
     const formData = new FormData();
@@ -232,7 +229,8 @@ const handleSubmit = async () => {
     if (newform.value.city) { formData.append('city', newform.value.city) }
     if (newform.value.district) { formData.append('district', newform.value.district) }
     if (newform.value.address) { formData.append('address', newform.value.address) }
-
+    // formData.append('user_id', .value.address)
+    // formData.append('user_name', newform.value.address)
     if (Object.keys(placesRef.value.selectedPlace).length) {
       formData.append('gps_latitude', placesRef.value.selectedPlace.location.lat)
       formData.append('gps_longitude', placesRef.value.selectedPlace.location.lng)
@@ -244,7 +242,8 @@ const handleSubmit = async () => {
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-    const response = await axios.post('/api/post', formData)
+    console.log(formData)
+    const response = await axios.post(`/api/post/${cardData.value.id}/reply`, formData)
     checkValue.value = false
     newform.value = {...initialNewform.value}
     files.value = []
@@ -254,31 +253,20 @@ const handleSubmit = async () => {
       icon: 'success'
     })
     .then(() => {
-      router.push('/')
+        router.push('/detail')
     })
-    endLoading()
   } catch (error) {
-    endLoading()
     alert('An error occurred during file upload');
   }
 }
 </script>
 <template>
-  <CommonLoading v-if="loading" />
   <LayoutDefault>
-    <template #header>
-      <!-- <CommonHeaderBack @submit="goBack">新增回報</CommonHeaderBack> -->
-    </template>
+    <!-- <template #header>
+      <CommonHeaderBack @submit="goBack">{{ cardData.title }}</CommonHeaderBack>
+    </template> -->
     <div>
     <div class="mobile-content">
-      <div class="mb-3">
-        <div class="mb-2 font-bold">
-          案件內容
-        </div>
-        <div>
-          <span class="px-2"></span>動物遺失回報
-        </div>
-      </div>
       <div class="mb-3">
         <div class="mb-2 require">
             發生地點
@@ -293,7 +281,8 @@ const handleSubmit = async () => {
       </div>
       <div class="mb-3">
         <div class="mb-2 require">
-          案件主旨
+          案件主旨 
+
         </div>
         <div>
           <CommonInput placeholder="請輸入主旨" v-model="newform.title" />
@@ -344,24 +333,7 @@ const handleSubmit = async () => {
           </div>
         </div>
         <input type="file" ref="fileInput" class="hidden"  @change="handleFileChange" capture multiple accept="image/*" />
-        <!-- <div class="content-upload-btn">
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-          <label class="upload-btn" @click="showSelectModel()">
-            +<br>
-            上傳檔案
-          </label>
-        </div> -->
+
       </div>
       <div class="submit-btn-style">
         <div class="mb-3 submit-btn-header text-primary-500">
@@ -376,43 +348,8 @@ const handleSubmit = async () => {
           <CommonRadio v-model="agree" :value="true">同意</CommonRadio>
           <CommonRadio v-model="agree" :value="false">不同意</CommonRadio>
         </div>
-        <!-- <div class="flex">
-          <CommonBtn class="w-30" type="secondary">取消</CommonBtn>
-          <div class="mx-2"></div>
-          <CommonBtn class="w-65" type="primary" @click="submitData()">送出</CommonBtn>
-        </div> -->
       </div>
-
     </div>
-    <!-- <div class="select-model-bg" :class="{'op-1': showModal}">
-      <div class="relative h-full">
-        <div class="model-position">
-          <div class="select-model">
-            <div class="pb-5 border-one ">
-              <small>
-                請選擇上傳方式
-              </small>
-            </div>
-            <div class="py-3 border-one">
-              相簿
-            </div>
-            <div class="py-3 border-one">
-              拍照
-            </div>
-            <div class="py-3 border-one">
-              錄影
-            </div>
-            <div class="py-3">
-              錄音
-            </div>
-          </div>
-          <div class="cancel-model" @click="hideModal()">
-            取消
-          </div>
-        </div>
-
-      </div>
-    </div> -->
   </div>
     <template #action>
       <div class="w-full flex gap-2 m-5 mb-10">
