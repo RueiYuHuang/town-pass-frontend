@@ -7,7 +7,7 @@ import { transDate } from '@/utils/transData'
 // layout
 import LayoutDefault from '@/components/layout/Default.vue'
 import CommonHeaderBack from '@/components/common/header/Back.vue'
-
+import CommonResponse from '@/components/common/Response.vue'
 import GoogleMap from '@/components/common/google/Map.vue'
 
 import CommonBtn from '@/components/common/Btn.vue'
@@ -92,10 +92,10 @@ const selectedImg = (data) => {
       </div>
 
       <!-- Add  Start -->
-      <div style="padding-bottom: 124px;">
-        <div v-for="(animal, index) in animalResponses.data" :key="index">
-        <Response :animal="animal" :index="index" />
-      </div>
+      <div style="padding-bottom: 124px;" v-if="animalResponses.data">
+        <div v-for="(animal, index) in animalResponses.data.slice(0, 2)" :key="index">
+          <CommonResponse :animal="animal" :index="index" />
+        </div>
       </div>
 
       <!-- Add  End -->
