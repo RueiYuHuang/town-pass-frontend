@@ -12,14 +12,12 @@ import CommonTabRow from '@/components/common/TabRow/Index.vue';
 import CommonTabRowBtn from '@/components/common/TabRow/Btn.vue';
 import CommonBtn from '@/components/common/Btn.vue'
 import CommonCard from '@/components/common/Card.vue'
+import { useHandleConnectionData } from '@/composables/useHandleConnectionData';
 import { useConnectionMessage } from '@/composables/useConnectionMessage';
 const cardSrore = useCardStore()
 const { setCardData } = cardSrore
 const { cardData } = storeToRefs(cardSrore)
-function callFlutter(action, data = null) {
-  useConnectionMessage(action, data)
-};
-callFlutter("userinfo", null)
+
 const router = useRouter()
 const handleDetail = (data) => {
   console.log('data', data)
@@ -64,9 +62,24 @@ const fetchInit = async () => {
 const closeWindow = () => {
   window.close();
 }
+
+
+const handleUserinfo = (event) => {
+  const result = JSON.parse(event.data);
+  data.value = result
+  console.log('userinfo:', result);
+  localStorage.setItem('id', result.data.id)
+  localStorage.setItem('name', result.data.username)
+}
+
+const callFlutter = (action, data = null) => {
+  useConnectionMessage(action, data)
+}
+callFlutter('userinfo')
 onMounted(async () => {
   await fetchInit()
   history.replaceState(null, '', window.location.href);
+  useHandleConnectionData(handleUserinfo);
 })
 
 const handleNewForm = (data) => {
