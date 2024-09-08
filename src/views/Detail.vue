@@ -14,11 +14,23 @@ import CommonBtn from '@/components/common/Btn.vue'
 
 import axios from '../utils/axios' // Add
 import Response from './Response.vue' // Add
+
 const animalResponses = ref([]) // Add
 const fetchAnimalResponses = async () => { // Add
   try {
     const response = await axios.get(`/api/post/${cardData.value.id}/reply`)  // Replace with your actual API endpoint
     animalResponses.value = response.data
+    for(let i = 0; i < animalResponses.value.data.length; i++) {
+      const animal = animalResponses.value.data[i]
+      mapRef.value.addMarker({ lat: Number(animal.gps_latitude), lng: Number(animal.gps_longitude) })
+    }
+    mapRef.value.addPolygon(
+      [{ lat: Number(cardData.value.gps_latitude), lng: Number(cardData.value.gps_longitude)}].concat(
+      animalResponses.value.data.map((animal) => ({
+        lat: Number(animal.gps_latitude),
+        lng: Number(animal.gps_longitude),
+      })))
+    )
   } catch (error) {
     console.error("Failed to fetch animal data:", error)
   }
@@ -47,7 +59,9 @@ const mapRef = ref(null)
 onMounted(() => {
   selectImgSrc.value = `${baseUrl}${cardData.value.files[0].url}`
   mapRef.value.addMarker({ lat: Number(cardData.value.gps_latitude), lng: Number(cardData.value.gps_longitude) })
-   fetchAnimalResponses()
+  // for each data in animalResponses.value.data
+  
+  fetchAnimalResponses()
 })
 const selectedImg = (data) => {
   console.log('selectedImg')
