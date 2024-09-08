@@ -84,7 +84,7 @@ const selectedImg = (data) => {
       <div class="">
         <GoogleMap ref="mapRef" :center="{ lat: Number(cardData.gps_latitude), lng: Number(cardData.gps_longitude) }" :zoom="15" />
       </div>
-      <div class="flex" style="justify-content: space-between;">
+      <div class="flex" style="justify-content: space-between; align-items: center;">
         <div class="my-2 font-bold">更多回覆： </div>
         <div> 
           <RouterLink :to="`/response?id=${cardData.id}`">查看更多</RouterLink>
