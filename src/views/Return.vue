@@ -255,12 +255,7 @@ const handleSubmit = async () => {
       icon: 'success'
     })
     .then(() => {
-        history.replaceState(null, '', window.location.href);
-        nextTick(() => {
-            router.push('/detail')
-        })
-
-
+        router.push('/detail')
     })
   } catch (error) {
     alert('An error occurred during file upload');
