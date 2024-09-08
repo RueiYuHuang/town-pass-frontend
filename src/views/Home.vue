@@ -237,9 +237,9 @@ const initChartDogAndCat = () => {
         getOtherPageData(pages.value.page)
       }
     }
-    if (scrollTop <= 50 && !loading.value) {
-      fetchInit()
-    }
+    // if (scrollTop <= 50 && !loading.value) {
+    //   fetchInit()
+    // }
   };
   const selectChartFn = (val) => {
     selectChart.value = val
@@ -296,8 +296,8 @@ onBeforeUnmount(() => {
       <div class="pt-5 mr-5 flex">
         <div class="pl-5" v-if="selectList.length > 0">
           區域篩選: 
-          <span v-for="select in selectList" :key="select">
-            {{  select  }} 、
+          <span v-for="(select, index) in selectList" :key="select">
+            {{  select  }}  <span v-if="index+1 != selectList.length">、</span>
           </span>
         </div>
         <img src="/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
