@@ -137,7 +137,7 @@ const goBack = async () => {
     cancelButtonText: '取消'
   })
   if (result.isConfirmed) {
-    router.back()
+    router.push('/')
   } 
 }
 
