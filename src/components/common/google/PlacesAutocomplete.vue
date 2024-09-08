@@ -16,7 +16,16 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 const inputRef = ref(null)
-const selectedPlace = ref({})
+const selectedPlace = ref({
+  country: '',
+  city: '',
+  district: '',
+  address: '',
+  location: {
+    lat: 0,
+    lng: 0,
+  },
+})
 
 const initMap = async () => {
   const { Autocomplete } = await google.maps.importLibrary('places')
@@ -28,8 +37,31 @@ const initMap = async () => {
     if (!place || !place.geometry) {
       return
     }
+
+    // 提取地址組件
+    const addressComponents = place.address_components
+    const components = {
+      country: '',
+      city: '',
+      district: '',
+    }
+
+    // 遍歷地址組件，將它們分類
+    addressComponents.forEach((component) => {
+      const types = component.types
+      if (types.includes('country')) {
+        components.country = component.long_name
+      }
+      if (types.includes('administrative_area_level_1') || types.includes('locality')) {
+        components.city = component.long_name
+      }
+      if (types.includes('administrative_area_level_2') || types.includes('sublocality') || types.includes('neighborhood')) {
+        components.district = component.long_name
+      }
+    })
+
     selectedPlace.value = {
-      name: place.name,
+      ...components,
       address: place.formatted_address,
       location: {
         lat: place.geometry.location.lat(),
@@ -42,11 +74,6 @@ const initMap = async () => {
   })
 }
 
-// const clearInput = () => {
-//   selectedPlace.value = {}
-//   emit('update:modelValue', '')
-// }
-
 onMounted(() => {
   initMap()
 })
@@ -55,6 +82,7 @@ defineExpose({
   selectedPlace,
 })
 </script>
+
 <template>
   <div class="flex h-12 items-center overflow-hidden rounded-[10px] bg-grey">
     <div class="relative h-full flex-auto">

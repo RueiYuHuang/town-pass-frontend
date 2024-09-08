@@ -24,24 +24,66 @@ const selectedPlace = (data) => {
     lng.value = data.location.lng
 }
 const geocoderLocation = ref({
-})
+  lat: null,
+  lng: null,
+  country: '',
+  city: '',
+  district: '',
+  address: '',
+});
+
 const getAddressFromCoordinates = async (location) => {
   const geocoder = new google.maps.Geocoder();
   const latLng = new google.maps.LatLng(location.lat, location.lng);
+  console.log('location:', location);
   geocoderLocation.value = {
     lat: location.lat,
-    lng: location.lng
-  }
+    lng: location.lng,
+    country: '',
+    city: '',
+    district: '',
+    address: '',
+  };
 
   await geocoder.geocode({ location: latLng }, (results, status) => {
     if (status === 'OK' && results[0]) {
-        newform.value.address = results[0].formatted_address
-      console.log('地址:',  newform.value.address);
+      const addressComponents = results[0].address_components;
+      const components = {
+        country: '',
+        city: '',
+        district: '',
+      };
+
+      // 遍歷地址組件，將它們分類
+      addressComponents.forEach((component) => {
+        const types = component.types;
+        if (types.includes('country')) {
+          components.country = component.long_name;
+        }
+        if (types.includes('administrative_area_level_1') || types.includes('locality')) {
+          components.city = component.long_name;
+        }
+        if (types.includes('administrative_area_level_2') || types.includes('sublocality') || types.includes('neighborhood')) {
+          components.district = component.long_name;
+        }
+      });
+
+      geocoderLocation.value = {
+        ...geocoderLocation.value,
+        ...components,
+        address: results[0].formatted_address,
+      };
+
+      console.log('完整地址:', geocoderLocation.value)
+      newform.value = {...newform.value, ...geocoderLocation.value}
+      console.log('newform.value:', newform.value)
+
     } else {
       handleGeocodeError();
     }
   });
-}
+};
+
 onMounted(() => {
   if (!window.google) {
     const script = document.createElement('script');
@@ -53,26 +95,26 @@ onMounted(() => {
 });
 
 const getUserLocation = async () => {
-    if (navigator.geolocation) {
-      startLoading()
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          lat.value = userLocation.lat
-          lng.value = userLocation.lng
-          await getAddressFromCoordinates(userLocation)
-          endLoading()
-        }
-      );
-    } else {
-      handleLocationError(false)
-      endLoading()
-    }
+  if (navigator.geolocation) {
+    startLoading();
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        lat.value = userLocation.lat;
+        lng.value = userLocation.lng;
+        await getAddressFromCoordinates(userLocation);
+        endLoading();
+      }
+    );
+  } else {
+    handleLocationError(false);
+    endLoading();
+  }
+};
 
-}
 const showModal = ref(false)
 const hideModal = () => {
   showModal.value = false
@@ -226,20 +268,35 @@ const handleSubmit = async () => {
         formData.append('files[]', fileItem.file);
       })
     }
+    
+    if (newform.value.country) { 
+      formData.append('country', newform.value.country) 
+    } else if(placesRef.value.selectedPlace.country) {
+      formData.append('country', placesRef.value.selectedPlace.country)
+    }
+    if (newform.value.city) { 
+      formData.append('city', newform.value.city) 
+    } else if(placesRef.value.selectedPlace.city) {
+      formData.append('city', placesRef.value.selectedPlace.city)
+    }
+    if (newform.value.district) { 
+      formData.append('district', newform.value.district) 
+    } else if(placesRef.value.selectedPlace.district) {
+      formData.append('district', placesRef.value.selectedPlace.district)
+    }
+    if (newform.value.lat) { 
+      formData.append('gps_latitude', newform.value.lat)
+    } else if(placesRef.value.selectedPlace.location.lat) {
+      formData.append('gps_latitude', placesRef.value.selectedPlace.location.lat)
+    }
+    if (newform.value.lng) { 
+      formData.append('gps_longitude', newform.value.lng) 
+    } else if(placesRef.value.selectedPlace.location.lng) {
+      formData.append('gps_longitude', placesRef.value.selectedPlace.location.lng)
+    }
+    if (newform.value.address) { formData.append('address', newform.value.address) }
     if (newform.value.title) { formData.append('title', newform.value.title) }
     if (newform.value.content) { formData.append('content', newform.value.content) }
-    if (newform.value.country) { formData.append('country', newform.value.country) }
-    if (newform.value.city) { formData.append('city', newform.value.city) }
-    if (newform.value.district) { formData.append('district', newform.value.district) }
-    if (newform.value.address) { formData.append('address', newform.value.address) }
-
-    if (Object.keys(placesRef.value.selectedPlace).length) {
-      formData.append('gps_latitude', placesRef.value.selectedPlace.location.lat)
-      formData.append('gps_longitude', placesRef.value.selectedPlace.location.lng)
-    } else if(Object.keys(geocoderLocation.value).length) {
-      formData.append('gps_latitude', geocoderLocation.value.lat)
-      formData.append('gps_longitude', geocoderLocation.value.lng)
-    }
 
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
