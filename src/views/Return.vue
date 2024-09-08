@@ -332,7 +332,7 @@ const handleSubmit = async () => {
             <span>上傳檔案</span>
           </div>
         </div>
-        <input type="file" ref="fileInput" class="hidden"  @change="handleFileChange" capture multiple accept="image/*" />
+        <input type="file" ref="fileInput" class="hidden"  @change="handleFileChange" multiple accept="image/*" />
 
       </div>
       <div class="submit-btn-style">
