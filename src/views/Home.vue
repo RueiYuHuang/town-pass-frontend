@@ -66,7 +66,6 @@ const closeWindow = () => {
 }
 onMounted(async () => {
   await fetchInit()
-  history.replaceState(null, '', window.location.href);
 })
 
 const handleNewForm = (data) => {
