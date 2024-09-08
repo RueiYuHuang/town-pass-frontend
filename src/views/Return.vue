@@ -205,7 +205,7 @@ const handleSubmit = async () => {
   try {
     console.log('newform', newform.value);
     checkValue.value = true
-    if (!newform.value.title || !newform.value.content || !newform.value.address) {
+    if (!newform.value.content || !newform.value.address) {
       Swal.fire({
         title: '請填寫完整表單',
         icon: 'warning'
