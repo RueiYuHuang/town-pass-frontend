@@ -35,6 +35,7 @@ const linkBack = () => {
 const handleNewForm = () => {
   router.push('/return')
 }
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 const data = ref({
   location: '',
@@ -76,7 +77,13 @@ const selectedImg = (data) => {
       <div class="">
         <GoogleMap ref="mapRef" :center="{ lat: Number(cardData.gps_latitude), lng: Number(cardData.gps_longitude) }" :zoom="15" />
       </div>
-      <p class="my-2 font-bold">更多回覆： </p>
+      <div class="flex" style="justify-content: space-between;">
+        <div class="my-2 font-bold">更多回覆： </div>
+        <div> 
+          <RouterLink :to="`/response?id=${cardData.id}`">查看更多</RouterLink>
+        </div>
+      </div>
+
       <!-- Add  Start -->
       <div style="padding-bottom: 124px;">
         <div v-for="(animal, index) in animalResponses.data" :key="index">

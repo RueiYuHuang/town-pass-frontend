@@ -20,29 +20,41 @@
 
 <template>
     <div>
-        <div class="response_card" v-if="animal">
-        <div class="response_floor"> {{ animal.floor }} </div>
-        <div class="response_content">
-            <!-- <p class="title">發現地點：{{ animal.district }}</p> -->
-            <p class="title">發現位置：{{ animal.address }}</p>
-            <p class="description">{{ animal.content }}</p>
-            <div class="response_content_img">
-            <!-- Loop through images for each animal -->
-            <img v-for="(img, imgIndex) in animal.images" :key="imgIndex" :src="img" alt="Animal Image" />
+        <div v-for="animal in list" :key="animal">
+            <div class="response_card">
+            <div class="response_floor"> {{ animal.floor }} </div>
+            <div class="response_content">
+                <!-- <p class="title">發現地點：{{ animal.district }}</p> -->
+                <p class="title">發現位置：{{ animal.address }}</p>
+                <p class="description">{{ animal.content }}</p>
+                <div class="response_content_img">
+                <!-- Loop through images for each animal -->
+                <img v-for="(img, index) in animal.files" :src="`${baseUrl}${img.url}`" :key="img.url" alt="Animal Image" />
+                </div>
+                <p class="description">{{ animal.floor }}F : {{ formatDate(animal.created_at) }}</p>
             </div>
-            <p class="description">{{ animal.floor }}F : {{ formatDate(animal.created_at) }}</p>
+            </div>
         </div>
-        </div>
-        <hr />
     </div>
+
 </template>
 
 <script setup>
-defineProps({
-  animal: Object,
-  index: Number
-})
+import { ref } from 'vue'
+import {  useRoute } from 'vue-router';
+import axios from '../utils/axios.js'
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+const route = useRoute()
+const list = ref([])
+const getList = () => {
+    console.log(route.query.id)
+    axios.get(`/api/post/${route.query.id}/reply`)
+        .then((res) => {
+            list.value = res.data.data
+        })
+}
+getList()
 const formatDate = (dateString) => {
   const date = new Date(dateString); // 將傳入的字串轉換為 Date 物件
   const year = date.getFullYear();

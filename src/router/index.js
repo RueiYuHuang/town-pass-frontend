@@ -37,7 +37,7 @@ const routes = [
   { 
     path: '/response',
     component: ResponseView,
-    meta: { title: 'Response Page' }
+    meta: { title: '查看更多' }
   },
   { path: '/return', component: ReturnView, meta: { title: '回覆貼文' } }
 ]
