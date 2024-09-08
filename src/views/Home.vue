@@ -237,7 +237,7 @@ const initChartDogAndCat = () => {
         getOtherPageData(pages.value.page)
       }
     }
-    if (scrollTop <= 0 && !loading.value) {
+    if (scrollTop <= 20 && !loading.value) {
       fetchInit()
 
     }
@@ -294,7 +294,13 @@ onBeforeUnmount(() => {
       <CommonTabRowBtn value="tab2">寵物遺失統計</CommonTabRowBtn>
     </CommonTabRow>
     <div v-if="tabData === 'tab1'" style="padding-bottom: 88px">
-      <div class="pt-5 mr-5">
+      <div class="pt-5 mr-5 flex">
+        <div class="pl-5">
+          區域篩選: 
+          <span v-for="select in selectList" :key="select">
+            {{  select  }} 、
+          </span>
+        </div>
         <img src="/filter.png" style="width: 30px; display: block; margin-left: auto;" @click="showModal = !showModal">
       </div>
       <div v-if="loading">
