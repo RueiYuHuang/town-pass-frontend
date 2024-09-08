@@ -237,9 +237,8 @@ const initChartDogAndCat = () => {
         getOtherPageData(pages.value.page)
       }
     }
-    if (scrollTop <= 20 && !loading.value) {
+    if (scrollTop <= 50 && !loading.value) {
       fetchInit()
-
     }
   };
   const selectChartFn = (val) => {
@@ -295,7 +294,7 @@ onBeforeUnmount(() => {
     </CommonTabRow>
     <div v-if="tabData === 'tab1'" style="padding-bottom: 88px">
       <div class="pt-5 mr-5 flex">
-        <div class="pl-5">
+        <div class="pl-5" v-if="selectList.length > 0">
           區域篩選: 
           <span v-for="select in selectList" :key="select">
             {{  select  }} 、
