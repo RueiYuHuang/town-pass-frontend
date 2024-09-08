@@ -98,7 +98,9 @@ const submitData = () => {
         agree: agree.value,
         gps_longitude: lng.value,
         gps_latitude: lat.value,
-        address: placeData.value
+        address: placeData.value,
+        user_id: localStorage.getItem('id'),
+        user_name: localStorage.getItem('name')
     }
     checkValue.value = true
 
@@ -229,8 +231,8 @@ const handleSubmit = async () => {
     if (newform.value.city) { formData.append('city', newform.value.city) }
     if (newform.value.district) { formData.append('district', newform.value.district) }
     if (newform.value.address) { formData.append('address', newform.value.address) }
-    // formData.append('user_id', .value.address)
-    // formData.append('user_name', newform.value.address)
+    formData.append('user_id', localStorage.getItem('id'))
+    formData.append('user_name', localStorage.getItem('name'))
     if (Object.keys(placesRef.value.selectedPlace).length) {
       formData.append('gps_latitude', placesRef.value.selectedPlace.location.lat)
       formData.append('gps_longitude', placesRef.value.selectedPlace.location.lng)
