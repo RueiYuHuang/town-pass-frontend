@@ -281,7 +281,7 @@ const handleSubmit = async () => {
           <div v-if="checkValue && !newform.address" class="require-field">發生地點為必填</div>
         </div>
       </div>
-      <div class="mb-3">
+      <!-- <div class="mb-3">
         <div class="mb-2 require">
           案件主旨 
 
@@ -290,7 +290,7 @@ const handleSubmit = async () => {
           <CommonInput placeholder="請輸入主旨" v-model="newform.title" />
         </div>
         <div v-if="checkValue && !newform.title" class="require-field">案件主旨為必填</div>
-      </div>
+      </div> -->
       <div class="mb-3">
         <div class="mb-2 require">
           描述
